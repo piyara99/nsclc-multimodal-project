@@ -1,0 +1,23 @@
+{
+  "test_accuracy": 99.9333,
+  "test_auc": 1.0,
+  "test_f1": 0.9993,
+  "best_val_auc": 1.0,
+  "config": {
+    "data_dir": "data/raw",
+    "model_dir": "outputs/models",
+    "figures_dir": "outputs/figures",
+    "results_dir": "outputs/results",
+    "num_classes": 2,
+    "embedding_dim": 256,
+    "dropout": 0.4,
+    "epochs": 15,
+    "batch_size": 32,
+    "num_workers": 4,
+    "learning_rate": 0.0001,
+    "weight_decay": 0.0001,
+    "freeze_epochs": 3,
+    "seed": 42,
+    "device": "cuda"
+  }
+}
