@@ -1,8 +1,30 @@
-data/raw/ 
-data/features/ 
-data/wsi/ 
-outputs/models/ 
-__pycache__/ 
-.env 
-*.npy 
-*.pth 
+# Ignore large raw data
+data/raw/
+data/wsi/
+data/features/
+
+# Clinical data (keep only CSVs)
+data/clinical/*
+!data/clinical/*.csv
+
+# Keep metadata
+!data/metadata/**
+
+# Outputs
+outputs/models/
+outputs/results/
+outputs/figures/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# ML files
+*.npy
+*.pth
+
+# VS Code
+.vscode/
