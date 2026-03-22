@@ -1,0 +1,206 @@
+[{
+  "disease_type": "Adenomas and Adenocarcinomas", 
+  "project": {
+    "project_id": "TCGA-LUAD"
+  }, 
+  "submitter_id": "TCGA-MP-A4TC", 
+  "diagnoses": [
+    {
+      "morphology": "8070/3", 
+      "submitter_id": "TCGA-MP-A4TC_diagnosis2", 
+      "days_to_diagnosis": -2751, 
+      "created_datetime": "2025-01-06T15:46:03.825350-06:00", 
+      "treatments": [
+        {
+          "treatment_anatomic_sites": [
+            "Skin"
+          ], 
+          "days_to_treatment_start": -2753, 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-MP-A4TC_treatment6", 
+          "treatment_id": "75a12505-4eae-4e14-ab2d-ed244979e8af", 
+          "treatment_type": "Surgery, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "yes", 
+          "created_datetime": "2025-01-06T15:46:03.825350-06:00"
+        }, 
+        {
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-MP-A4TC_treatment5", 
+          "treatment_id": "ab4436f5-afeb-429e-bd82-2dc5cb58de63", 
+          "treatment_type": "Radiation Therapy, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "no", 
+          "created_datetime": "2025-01-06T15:46:03.825350-06:00"
+        }, 
+        {
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-MP-A4TC_treatment4", 
+          "treatment_id": "de2a139f-c2d1-469e-bb67-aad49e5d3838", 
+          "treatment_type": "Pharmaceutical Therapy, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "no", 
+          "created_datetime": "2025-01-06T15:46:03.825350-06:00"
+        }
+      ], 
+      "tissue_or_organ_of_origin": "Skin of other and unspecified parts of face", 
+      "age_at_diagnosis": 25720, 
+      "primary_diagnosis": "Squamous cell carcinoma, NOS", 
+      "classification_of_tumor": "Prior primary", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "diagnosis_id": "815e2f37-a9ac-4feb-b0da-9ee334550000", 
+      "site_of_resection_or_biopsy": "Not Reported", 
+      "state": "released", 
+      "diagnosis_is_primary_disease": "false"
+    }, 
+    {
+      "synchronous_malignancy": "No", 
+      "ajcc_pathologic_stage": "Stage IIIA", 
+      "days_to_diagnosis": 0, 
+      "laterality": "Right", 
+      "treatments": [
+        {
+          "days_to_treatment_end": 25, 
+          "clinical_trial_indicator": "No", 
+          "days_to_treatment_start": 25, 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-MP-A4TC_treatment2", 
+          "treatment_id": "3a44a8ba-af80-462a-8584-388ea6735c2b", 
+          "treatment_type": "Chemotherapy", 
+          "treatment_outcome": "Complete Response", 
+          "state": "released", 
+          "therapeutic_agents": "Vinorelbine Tartrate", 
+          "treatment_or_therapy": "yes", 
+          "created_datetime": "2025-01-06T15:46:03.825350-06:00"
+        }, 
+        {
+          "days_to_treatment_end": 25, 
+          "clinical_trial_indicator": "No", 
+          "days_to_treatment_start": 25, 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-MP-A4TC_treatment", 
+          "treatment_id": "c0d35c20-6478-580d-b85d-38b5deaab59b", 
+          "treatment_type": "Chemotherapy", 
+          "treatment_outcome": "Complete Response", 
+          "state": "released", 
+          "therapeutic_agents": "Cisplatin", 
+          "treatment_or_therapy": "yes"
+        }, 
+        {
+          "treatment_intent_type": "Adjuvant", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-MP-A4TC_treatment3", 
+          "treatment_id": "dcf6b541-427d-4837-8f3a-81b7d34b1f2e", 
+          "treatment_type": "Radiation Therapy, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "no", 
+          "created_datetime": "2025-01-06T15:46:03.825350-06:00"
+        }
+      ], 
+      "tissue_or_organ_of_origin": "Middle lobe, lung", 
+      "days_to_last_follow_up": 74.0, 
+      "age_at_diagnosis": 28471, 
+      "primary_diagnosis": "Adenocarcinoma, NOS", 
+      "updated_datetime": "2025-10-24T10:05:51.248574-05:00", 
+      "prior_malignancy": "yes", 
+      "year_of_diagnosis": 2008, 
+      "prior_treatment": "No", 
+      "state": "released", 
+      "diagnosis_is_primary_disease": "true", 
+      "ajcc_staging_system_edition": "6th", 
+      "ajcc_pathologic_t": "T1", 
+      "morphology": "8140/3", 
+      "ajcc_pathologic_n": "N2", 
+      "ajcc_pathologic_m": "M0", 
+      "submitter_id": "TCGA-MP-A4TC_diagnosis", 
+      "classification_of_tumor": "primary", 
+      "residual_disease": "R0", 
+      "pathology_details": [
+        {
+          "consistent_pathology_review": "Yes", 
+          "pathology_detail_id": "4b46a115-c14c-4a6f-8992-60f05fe75781", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-MP-A4TC_pathology_detail", 
+          "state": "released", 
+          "created_datetime": "2025-01-06T15:46:03.825350-06:00"
+        }
+      ], 
+      "diagnosis_id": "8720849f-1233-5597-82b1-0805342c26a5", 
+      "icd_10_code": "C34.2", 
+      "site_of_resection_or_biopsy": "Lung, NOS"
+    }
+  ], 
+  "consent_type": "Consent by Death", 
+  "demographic": {
+    "ethnicity": "not hispanic or latino", 
+    "gender": "male", 
+    "race": "white", 
+    "vital_status": "Dead", 
+    "age_at_index": 77, 
+    "submitter_id": "TCGA-MP-A4TC_demographic", 
+    "days_to_birth": -28471, 
+    "demographic_id": "a16c2726-59d5-57b4-8576-921a2b7d4e80", 
+    "age_is_obfuscated": "false", 
+    "updated_datetime": "2025-10-16T15:38:26.614685-05:00", 
+    "days_to_death": 74, 
+    "state": "released", 
+    "sex_at_birth": "male", 
+    "country_of_residence_at_enrollment": "United States"
+  }, 
+  "exposures": [
+    {
+      "tobacco_smoking_quit_year": 1976, 
+      "tobacco_smoking_status": "Current Reformed Smoker for > 15 yrs", 
+      "updated_datetime": "2025-01-16T14:30:40.181262-06:00", 
+      "exposure_id": "2e36e44b-f32f-5e9c-b2b8-aef4623ae826", 
+      "exposure_type": "Tobacco", 
+      "tobacco_smoking_onset_year": 1944, 
+      "submitter_id": "TCGA-MP-A4TC_exposure", 
+      "state": "released", 
+      "pack_years_smoked": 125.0
+    }
+  ], 
+  "primary_site": "Bronchus and lung", 
+  "updated_datetime": "2025-01-06T15:46:03.825350-06:00", 
+  "case_id": "99c35245-e1c8-4805-b7a5-f703bb506030", 
+  "follow_ups": [
+    {
+      "timepoint_category": "Last Contact", 
+      "follow_up_id": "3b1f1b6a-0124-4f44-8836-68839cc36f5e", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "submitter_id": "TCGA-MP-A4TC_follow_up", 
+      "disease_response": "TF-Tumor Free", 
+      "days_to_follow_up": 74, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T15:46:03.825350-06:00"
+    }, 
+    {
+      "timepoint_category": "Follow-up", 
+      "follow_up_id": "9eb56a14-d97c-4afa-80af-67b617624bcb", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "submitter_id": "TCGA-MP-A4TC_follow_up2", 
+      "disease_response": "TF-Tumor Free", 
+      "days_to_follow_up": 74, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T15:46:03.825350-06:00"
+    }, 
+    {
+      "follow_up_id": "a9419efd-0693-5a2e-ac55-c12c3e21901b", 
+      "other_clinical_attributes": [
+        {
+          "fev1_ref_pre_bronch_percent": 83.0, 
+          "timepoint_category": "Not Reported", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "other_clinical_attribute_id": "5cc7ec04-566e-4054-836e-f3670e74683d", 
+          "submitter_id": "TCGA-MP-A4TC_other_clinical_attribute", 
+          "fev1_ref_post_bronch_percent": 76.0, 
+          "state": "released", 
+          "created_datetime": "2025-01-06T15:46:03.825350-06:00", 
+          "dlco_ref_predictive_percent": 68.0
+        }
+      ]
+    }
+  ], 
+  "index_date": "Diagnosis", 
+  "state": "released"
+}]

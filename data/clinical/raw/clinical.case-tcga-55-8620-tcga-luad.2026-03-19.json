@@ -1,0 +1,173 @@
+[{
+  "lost_to_followup": "No", 
+  "disease_type": "Adenomas and Adenocarcinomas", 
+  "project": {
+    "project_id": "TCGA-LUAD"
+  }, 
+  "submitter_id": "TCGA-55-8620", 
+  "days_to_consent": 66, 
+  "diagnoses": [
+    {
+      "synchronous_malignancy": "No", 
+      "ajcc_pathologic_stage": "Stage IV", 
+      "days_to_diagnosis": 0, 
+      "laterality": "Left", 
+      "treatments": [
+        {
+          "days_to_treatment_end": 161, 
+          "treatment_dose": 3600, 
+          "days_to_treatment_start": 132, 
+          "submitter_id": "TCGA-55-8620_treatment", 
+          "treatment_id": "5a6f1473-9c70-593f-b6ee-32215807d1f8", 
+          "treatment_type": "Radiation, External Beam", 
+          "treatment_or_therapy": "yes", 
+          "number_of_fractions": 18.0, 
+          "treatment_anatomic_sites": [
+            "Distant Site"
+          ], 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "treatment_outcome": "Progressive Disease", 
+          "state": "released", 
+          "treatment_dose_units": "cGy"
+        }, 
+        {
+          "treatment_intent_type": "Adjuvant", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-55-8620_treatment2", 
+          "treatment_id": "c3b0ba1b-f902-4717-b989-b4089deed657", 
+          "treatment_type": "Pharmaceutical Therapy, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "no", 
+          "created_datetime": "2025-01-06T14:31:16.790377-06:00"
+        }
+      ], 
+      "tissue_or_organ_of_origin": "Upper lobe, lung", 
+      "days_to_last_follow_up": 375.0, 
+      "age_at_diagnosis": 22091, 
+      "primary_diagnosis": "Adenocarcinoma, NOS", 
+      "updated_datetime": "2025-10-24T10:05:51.248574-05:00", 
+      "prior_malignancy": "no", 
+      "year_of_diagnosis": 2012, 
+      "prior_treatment": "No", 
+      "state": "released", 
+      "diagnosis_is_primary_disease": "true", 
+      "ajcc_staging_system_edition": "7th", 
+      "ajcc_pathologic_t": "T1a", 
+      "morphology": "8140/3", 
+      "ajcc_pathologic_n": "N1", 
+      "ajcc_pathologic_m": "M1b", 
+      "submitter_id": "TCGA-55-8620_diagnosis", 
+      "classification_of_tumor": "primary", 
+      "residual_disease": "R0", 
+      "pathology_details": [
+        {
+          "consistent_pathology_review": "Yes", 
+          "pathology_detail_id": "01fc42e5-aaa7-4388-a838-448e25c5178d", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-55-8620_pathology_detail", 
+          "state": "released", 
+          "created_datetime": "2025-01-06T14:31:16.790377-06:00"
+        }
+      ], 
+      "diagnosis_id": "33c66148-14bf-5acd-b2cf-9981dc81e702", 
+      "icd_10_code": "C34.1", 
+      "site_of_resection_or_biopsy": "Lung, NOS", 
+      "sites_of_involvement": [
+        "Central Lung"
+      ]
+    }
+  ], 
+  "consent_type": "Informed Consent", 
+  "demographic": {
+    "ethnicity": "not hispanic or latino", 
+    "gender": "male", 
+    "race": "white", 
+    "vital_status": "Dead", 
+    "age_at_index": 60, 
+    "submitter_id": "TCGA-55-8620_demographic", 
+    "days_to_birth": -22091, 
+    "demographic_id": "ff2ea5b3-8ea4-53ba-9d7f-0542e9dc3f72", 
+    "age_is_obfuscated": "false", 
+    "updated_datetime": "2025-10-16T15:38:26.614685-05:00", 
+    "days_to_death": 375, 
+    "state": "released", 
+    "sex_at_birth": "male", 
+    "country_of_residence_at_enrollment": "United States"
+  }, 
+  "exposures": [
+    {
+      "tobacco_smoking_quit_year": 2012, 
+      "tobacco_smoking_status": "Current Reformed Smoker for < or = 15 yrs", 
+      "updated_datetime": "2025-01-16T14:30:40.181262-06:00", 
+      "exposure_id": "b59f922c-716e-50ed-aef7-d1b5da7c084c", 
+      "exposure_type": "Tobacco", 
+      "tobacco_smoking_onset_year": 1965, 
+      "submitter_id": "TCGA-55-8620_exposure", 
+      "state": "released", 
+      "pack_years_smoked": 154.0
+    }
+  ], 
+  "primary_site": "Bronchus and lung", 
+  "updated_datetime": "2025-01-06T14:31:16.790377-06:00", 
+  "case_id": "5510ad32-62fd-4adc-964a-ae4e997c2f4b", 
+  "follow_ups": [
+    {
+      "timepoint_category": "Follow-up", 
+      "follow_up_id": "132804a4-5b7f-48c4-8092-5c16524fb822", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "submitter_id": "TCGA-55-8620_follow_up3", 
+      "disease_response": "WT-With Tumor", 
+      "days_to_follow_up": 375, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T14:31:16.790377-06:00"
+    }, 
+    {
+      "karnofsky_performance_status": "70", 
+      "timepoint_category": "Preoperative", 
+      "follow_up_id": "14c2e2b1-28a0-4c9d-ac67-a4119240df50", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "ecog_performance_status": "2", 
+      "submitter_id": "TCGA-55-8620_follow_up4", 
+      "state": "released", 
+      "created_datetime": "2025-01-06T14:31:16.790377-06:00"
+    }, 
+    {
+      "timepoint_category": "Last Contact", 
+      "follow_up_id": "3ea99b5b-4e1a-45f5-81e1-83d5ab42f453", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "submitter_id": "TCGA-55-8620_follow_up", 
+      "disease_response": "WT-With Tumor", 
+      "days_to_follow_up": 375, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T14:31:16.790377-06:00"
+    }, 
+    {
+      "timepoint_category": "Follow-up", 
+      "follow_up_id": "51f8f832-415c-4bf0-bf8b-da004b7a26f6", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "submitter_id": "TCGA-55-8620_follow_up2", 
+      "disease_response": "WT-With Tumor", 
+      "days_to_follow_up": 66, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T14:31:16.790377-06:00"
+    }, 
+    {
+      "follow_up_id": "32e4760a-b6f0-54df-a842-e879d6602411", 
+      "other_clinical_attributes": [
+        {
+          "fev1_ref_pre_bronch_percent": 76.0, 
+          "timepoint_category": "Not Reported", 
+          "fev1_fvc_pre_bronch_percent": 73.0, 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "other_clinical_attribute_id": "2725ca20-8d9c-4008-a360-db81a73b1a9b", 
+          "submitter_id": "TCGA-55-8620_other_clinical_attribute", 
+          "state": "released", 
+          "created_datetime": "2025-01-06T14:31:16.790377-06:00", 
+          "dlco_ref_predictive_percent": 64.0
+        }
+      ]
+    }
+  ], 
+  "index_date": "Diagnosis", 
+  "state": "released"
+}]

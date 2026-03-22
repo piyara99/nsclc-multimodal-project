@@ -1,0 +1,155 @@
+[{
+  "lost_to_followup": "No", 
+  "disease_type": "Adenomas and Adenocarcinomas", 
+  "project": {
+    "project_id": "TCGA-LUAD"
+  }, 
+  "submitter_id": "TCGA-86-8668", 
+  "days_to_consent": -1, 
+  "diagnoses": [
+    {
+      "synchronous_malignancy": "No", 
+      "ajcc_pathologic_stage": "Stage IA", 
+      "days_to_diagnosis": 0, 
+      "laterality": "Left", 
+      "treatments": [
+        {
+          "treatment_intent_type": "Adjuvant", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-86-8668_treatment2", 
+          "treatment_id": "5357cae2-1713-43f7-96f1-f66edc1f4ef0", 
+          "treatment_type": "Radiation Therapy, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "unknown", 
+          "created_datetime": "2025-01-06T15:30:04.266745-06:00"
+        }, 
+        {
+          "treatment_intent_type": "Adjuvant", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-86-8668_treatment", 
+          "treatment_id": "c87617d4-422f-53f1-8ba0-5520a150c606", 
+          "treatment_type": "Pharmaceutical Therapy, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "unknown"
+        }
+      ], 
+      "tissue_or_organ_of_origin": "Lower lobe, lung", 
+      "days_to_last_follow_up": 423.0, 
+      "age_at_diagnosis": 22383, 
+      "primary_diagnosis": "Bronchio-alveolar carcinoma, mucinous", 
+      "updated_datetime": "2025-10-24T10:05:51.248574-05:00", 
+      "prior_malignancy": "no", 
+      "year_of_diagnosis": 2012, 
+      "prior_treatment": "No", 
+      "state": "released", 
+      "diagnosis_is_primary_disease": "true", 
+      "ajcc_staging_system_edition": "7th", 
+      "ajcc_pathologic_t": "T1b", 
+      "morphology": "8253/3", 
+      "ajcc_pathologic_n": "N0", 
+      "ajcc_pathologic_m": "M0", 
+      "submitter_id": "TCGA-86-8668_diagnosis", 
+      "classification_of_tumor": "primary", 
+      "residual_disease": "R0", 
+      "pathology_details": [
+        {
+          "consistent_pathology_review": "Yes", 
+          "pathology_detail_id": "bacda408-a4ab-410e-8df1-5154f1f81fb3", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-86-8668_pathology_detail", 
+          "state": "released", 
+          "created_datetime": "2025-01-06T15:30:04.266745-06:00"
+        }
+      ], 
+      "diagnosis_id": "a5cc9bfc-5508-59de-8fbb-6191acc51a2b", 
+      "icd_10_code": "C34.3", 
+      "site_of_resection_or_biopsy": "Lung, NOS", 
+      "sites_of_involvement": [
+        "Peripheral Lung"
+      ]
+    }
+  ], 
+  "consent_type": "Informed Consent", 
+  "demographic": {
+    "ethnicity": "not hispanic or latino", 
+    "gender": "female", 
+    "race": "white", 
+    "vital_status": "Alive", 
+    "age_at_index": 61, 
+    "submitter_id": "TCGA-86-8668_demographic", 
+    "days_to_birth": -22383, 
+    "demographic_id": "e279a0dc-071e-580b-bd34-adbc3dd176ab", 
+    "age_is_obfuscated": "false", 
+    "updated_datetime": "2025-10-16T15:38:26.614685-05:00", 
+    "state": "released", 
+    "sex_at_birth": "female", 
+    "country_of_residence_at_enrollment": "Russia"
+  }, 
+  "exposures": [
+    {
+      "tobacco_smoking_status": "Lifelong Non-Smoker", 
+      "updated_datetime": "2025-01-16T14:30:40.181262-06:00", 
+      "exposure_id": "0eed42a3-5c7a-5acd-a320-52cf03117788", 
+      "exposure_type": "Tobacco", 
+      "submitter_id": "TCGA-86-8668_exposure", 
+      "state": "released"
+    }
+  ], 
+  "primary_site": "Bronchus and lung", 
+  "updated_datetime": "2025-01-06T15:30:04.266745-06:00", 
+  "case_id": "f2d8b332-2f03-46e5-a9d5-f163972e5fa7", 
+  "follow_ups": [
+    {
+      "karnofsky_performance_status": "100", 
+      "timepoint_category": "Preoperative", 
+      "follow_up_id": "16026014-9573-4715-85e0-db0d561a9550", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "ecog_performance_status": "0", 
+      "submitter_id": "TCGA-86-8668_follow_up4", 
+      "state": "released", 
+      "created_datetime": "2025-01-06T15:30:04.266745-06:00"
+    }, 
+    {
+      "karnofsky_performance_status": "100", 
+      "timepoint_category": "Other", 
+      "follow_up_id": "3f095c31-e15c-43e1-8727-38f39c088e72", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "ecog_performance_status": "0", 
+      "submitter_id": "TCGA-86-8668_follow_up5", 
+      "state": "released", 
+      "created_datetime": "2025-01-06T15:30:04.266745-06:00"
+    }, 
+    {
+      "timepoint_category": "Follow-up", 
+      "follow_up_id": "75c20c35-3d60-4ea6-84e6-e35cf2074aa7", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "submitter_id": "TCGA-86-8668_follow_up2", 
+      "disease_response": "TF-Tumor Free", 
+      "days_to_follow_up": 45, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T15:30:04.266745-06:00"
+    }, 
+    {
+      "timepoint_category": "Follow-up", 
+      "follow_up_id": "7ed6b4ad-1dc5-4c0e-9e23-7b85101492a3", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "submitter_id": "TCGA-86-8668_follow_up3", 
+      "disease_response": "TF-Tumor Free", 
+      "days_to_follow_up": 423, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T15:30:04.266745-06:00"
+    }, 
+    {
+      "timepoint_category": "Last Contact", 
+      "follow_up_id": "a5809721-f971-47f7-a167-5c2054fe82ac", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "submitter_id": "TCGA-86-8668_follow_up", 
+      "disease_response": "TF-Tumor Free", 
+      "days_to_follow_up": 423, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T15:30:04.266745-06:00"
+    }
+  ], 
+  "index_date": "Diagnosis", 
+  "state": "released"
+}]

@@ -1,0 +1,8 @@
+data/raw/ 
+data/features/ 
+data/wsi/ 
+outputs/models/ 
+__pycache__/ 
+.env 
+*.npy 
+*.pth 

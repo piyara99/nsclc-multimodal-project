@@ -1,0 +1,11 @@
+[{
+  "primary_site": "Bronchus and lung", 
+  "disease_type": "Adenomas and Adenocarcinomas", 
+  "updated_datetime": "2019-05-01T12:06:30.916966-05:00", 
+  "case_id": "c43c8eea-7014-4abe-b805-397a9062d3e0", 
+  "project": {
+    "project_id": "TCGA-LUAD"
+  }, 
+  "submitter_id": "TCGA-17-Z031", 
+  "state": "released"
+}]

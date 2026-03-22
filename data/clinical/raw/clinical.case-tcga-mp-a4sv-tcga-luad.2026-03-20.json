@@ -1,0 +1,139 @@
+[{
+  "disease_type": "Adenomas and Adenocarcinomas", 
+  "project": {
+    "project_id": "TCGA-LUAD"
+  }, 
+  "submitter_id": "TCGA-MP-A4SV", 
+  "diagnoses": [
+    {
+      "synchronous_malignancy": "No", 
+      "ajcc_pathologic_stage": "Stage IB", 
+      "days_to_diagnosis": 0, 
+      "laterality": "Left", 
+      "treatments": [
+        {
+          "treatment_intent_type": "Adjuvant", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-MP-A4SV_treatment2", 
+          "treatment_id": "547d6ca8-5ed5-40b1-bfd2-f16eb1fbdff5", 
+          "treatment_type": "Radiation Therapy, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "no", 
+          "created_datetime": "2025-01-06T14:58:20.585755-06:00"
+        }, 
+        {
+          "treatment_intent_type": "Adjuvant", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-MP-A4SV_treatment", 
+          "treatment_id": "850a4d99-3c2a-534c-bfe3-8fbd91530c3d", 
+          "treatment_type": "Pharmaceutical Therapy, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "no"
+        }
+      ], 
+      "tissue_or_organ_of_origin": "Lower lobe, lung", 
+      "days_to_last_follow_up": 2620.0, 
+      "age_at_diagnosis": 24516, 
+      "primary_diagnosis": "Adenocarcinoma, NOS", 
+      "updated_datetime": "2025-10-24T10:05:51.248574-05:00", 
+      "prior_malignancy": "no", 
+      "year_of_diagnosis": 2001, 
+      "prior_treatment": "No", 
+      "state": "released", 
+      "diagnosis_is_primary_disease": "true", 
+      "ajcc_staging_system_edition": "5th", 
+      "ajcc_pathologic_t": "T2", 
+      "morphology": "8140/3", 
+      "ajcc_pathologic_n": "N0", 
+      "ajcc_pathologic_m": "M0", 
+      "submitter_id": "TCGA-MP-A4SV_diagnosis", 
+      "classification_of_tumor": "primary", 
+      "residual_disease": "R0", 
+      "pathology_details": [
+        {
+          "consistent_pathology_review": "Yes", 
+          "pathology_detail_id": "e1929a3b-721b-40c2-9530-c623225a1dc5", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-MP-A4SV_pathology_detail", 
+          "state": "released", 
+          "created_datetime": "2025-01-06T14:58:20.585755-06:00"
+        }
+      ], 
+      "diagnosis_id": "77c1cfc3-0a92-507b-80b5-edf20d005785", 
+      "icd_10_code": "C34.3", 
+      "site_of_resection_or_biopsy": "Lung, NOS"
+    }
+  ], 
+  "consent_type": "Consent by Death", 
+  "demographic": {
+    "ethnicity": "Unknown", 
+    "gender": "male", 
+    "race": "Unknown", 
+    "vital_status": "Dead", 
+    "age_at_index": 67, 
+    "submitter_id": "TCGA-MP-A4SV_demographic", 
+    "days_to_birth": -24516, 
+    "demographic_id": "53ba217f-641e-5486-8cdc-985111493363", 
+    "age_is_obfuscated": "false", 
+    "updated_datetime": "2025-10-16T15:38:26.614685-05:00", 
+    "days_to_death": 2620, 
+    "state": "released", 
+    "sex_at_birth": "male", 
+    "country_of_residence_at_enrollment": "United States"
+  }, 
+  "exposures": [
+    {
+      "tobacco_smoking_status": "Current Smoker", 
+      "updated_datetime": "2025-01-16T14:30:40.181262-06:00", 
+      "exposure_id": "297fda55-20a3-5a31-94d0-b253fd0b9a15", 
+      "exposure_type": "Tobacco", 
+      "tobacco_smoking_onset_year": 1946, 
+      "submitter_id": "TCGA-MP-A4SV_exposure", 
+      "state": "released", 
+      "pack_years_smoked": 110.0
+    }
+  ], 
+  "primary_site": "Bronchus and lung", 
+  "updated_datetime": "2025-01-06T14:58:20.585755-06:00", 
+  "case_id": "706420c4-8820-4b41-80d9-f3efd1d2a4f0", 
+  "follow_ups": [
+    {
+      "timepoint_category": "Last Contact", 
+      "follow_up_id": "dfe8d217-a23f-457b-b544-d49cf1f0f0d6", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "submitter_id": "TCGA-MP-A4SV_follow_up", 
+      "disease_response": "Unknown", 
+      "days_to_follow_up": 2620, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T14:58:20.585755-06:00"
+    }, 
+    {
+      "timepoint_category": "Follow-up", 
+      "follow_up_id": "e7d3a330-1317-4d7c-9d7f-cd3fdf4d20a9", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "submitter_id": "TCGA-MP-A4SV_follow_up2", 
+      "disease_response": "Unknown", 
+      "days_to_follow_up": 2620, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T14:58:20.585755-06:00"
+    }, 
+    {
+      "follow_up_id": "eb2500dc-7fb4-5bf1-ab95-8205069b0087", 
+      "other_clinical_attributes": [
+        {
+          "fev1_ref_pre_bronch_percent": 62.0, 
+          "timepoint_category": "Not Reported", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "other_clinical_attribute_id": "15b9552b-a8b8-48e9-82c8-37401fb01eaf", 
+          "submitter_id": "TCGA-MP-A4SV_other_clinical_attribute", 
+          "fev1_ref_post_bronch_percent": 78.0, 
+          "state": "released", 
+          "created_datetime": "2025-01-06T14:58:20.585755-06:00", 
+          "dlco_ref_predictive_percent": 48.0
+        }
+      ]
+    }
+  ], 
+  "index_date": "Diagnosis", 
+  "state": "released"
+}]

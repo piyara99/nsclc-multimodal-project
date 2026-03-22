@@ -1,0 +1,161 @@
+[{
+  "lost_to_followup": "No", 
+  "disease_type": "Adenomas and Adenocarcinomas", 
+  "project": {
+    "project_id": "TCGA-LUAD"
+  }, 
+  "submitter_id": "TCGA-50-5933", 
+  "diagnoses": [
+    {
+      "synchronous_malignancy": "No", 
+      "ajcc_pathologic_stage": "Stage IIIB", 
+      "days_to_diagnosis": 0, 
+      "laterality": "Left", 
+      "treatments": [
+        {
+          "days_to_treatment_end": 215, 
+          "course_number": 1.0, 
+          "treatment_dose": 5400, 
+          "days_to_treatment_start": 171, 
+          "submitter_id": "TCGA-50-5933_treatment", 
+          "treatment_id": "32d35992-52d0-50ee-baf8-b367bca71b60", 
+          "treatment_type": "Radiation, External Beam", 
+          "treatment_or_therapy": "yes", 
+          "number_of_fractions": 30.0, 
+          "treatment_anatomic_sites": [
+            "Primary Tumor Field"
+          ], 
+          "treatment_intent_type": "Adjuvant", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "state": "released", 
+          "treatment_dose_units": "cGy"
+        }, 
+        {
+          "days_to_treatment_end": 210, 
+          "clinical_trial_indicator": "No", 
+          "days_to_treatment_start": 189, 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-50-5933_treatment2", 
+          "treatment_id": "8960f8a9-c05e-4a15-b3f3-7dbe5c4ccf46", 
+          "treatment_type": "Chemotherapy", 
+          "treatment_outcome": "Complete Response", 
+          "state": "released", 
+          "therapeutic_agents": "Carboplatin", 
+          "treatment_or_therapy": "yes", 
+          "created_datetime": "2025-01-06T14:40:24.502190-06:00"
+        }, 
+        {
+          "days_to_treatment_end": 210, 
+          "clinical_trial_indicator": "No", 
+          "days_to_treatment_start": 189, 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-50-5933_treatment3", 
+          "treatment_id": "e62a3e5a-f0d1-4aa9-bd0a-58199df5969b", 
+          "treatment_type": "Chemotherapy", 
+          "treatment_outcome": "Complete Response", 
+          "state": "released", 
+          "therapeutic_agents": "Paclitaxel", 
+          "treatment_or_therapy": "yes", 
+          "created_datetime": "2025-01-06T14:40:24.502190-06:00"
+        }
+      ], 
+      "tissue_or_organ_of_origin": "Lower lobe, lung", 
+      "days_to_last_follow_up": 2393.0, 
+      "age_at_diagnosis": 26377, 
+      "primary_diagnosis": "Adenocarcinoma, NOS", 
+      "updated_datetime": "2025-10-24T10:05:51.248574-05:00", 
+      "prior_malignancy": "no", 
+      "year_of_diagnosis": 2001, 
+      "prior_treatment": "No", 
+      "state": "released", 
+      "diagnosis_is_primary_disease": "true", 
+      "ajcc_staging_system_edition": "5th", 
+      "ajcc_pathologic_t": "T4", 
+      "morphology": "8140/3", 
+      "ajcc_pathologic_n": "N2", 
+      "ajcc_pathologic_m": "M0", 
+      "submitter_id": "TCGA-50-5933_diagnosis", 
+      "classification_of_tumor": "primary", 
+      "pathology_details": [
+        {
+          "consistent_pathology_review": "Yes", 
+          "pathology_detail_id": "7f13975b-b7bc-457c-8415-2f5212c9eeaa", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-50-5933_pathology_detail", 
+          "state": "released", 
+          "created_datetime": "2025-01-06T14:40:24.502190-06:00"
+        }
+      ], 
+      "diagnosis_id": "7e6fd4a9-b2ed-5db3-b684-8cf065483351", 
+      "icd_10_code": "C34.3", 
+      "site_of_resection_or_biopsy": "Lung, NOS", 
+      "sites_of_involvement": [
+        "Central Lung"
+      ]
+    }
+  ], 
+  "consent_type": "Consent by Death", 
+  "demographic": {
+    "ethnicity": "not hispanic or latino", 
+    "gender": "male", 
+    "race": "white", 
+    "vital_status": "Dead", 
+    "age_at_index": 72, 
+    "submitter_id": "TCGA-50-5933_demographic", 
+    "days_to_birth": -26377, 
+    "demographic_id": "665672bd-7f0f-5a4e-8969-e5f43861d39a", 
+    "age_is_obfuscated": "false", 
+    "updated_datetime": "2025-10-16T15:38:26.614685-05:00", 
+    "days_to_death": 2393, 
+    "state": "released", 
+    "sex_at_birth": "male", 
+    "country_of_residence_at_enrollment": "United States"
+  }, 
+  "exposures": [
+    {
+      "tobacco_smoking_status": "Not Reported", 
+      "updated_datetime": "2025-01-16T14:30:40.181262-06:00", 
+      "exposure_id": "575e5472-d146-506e-890b-a3d83e45d1fe", 
+      "exposure_type": "Tobacco", 
+      "submitter_id": "TCGA-50-5933_exposure", 
+      "state": "released"
+    }
+  ], 
+  "primary_site": "Bronchus and lung", 
+  "updated_datetime": "2025-01-06T14:40:24.502190-06:00", 
+  "case_id": "7a0ea814-f0de-4bc4-a81a-daa000559369", 
+  "follow_ups": [
+    {
+      "timepoint_category": "Follow-up", 
+      "follow_up_id": "66ccf3a0-57b0-4033-b634-0c68b9d6fd7b", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "submitter_id": "TCGA-50-5933_follow_up3", 
+      "disease_response": "TF-Tumor Free", 
+      "days_to_follow_up": 2393, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T14:40:24.502190-06:00"
+    }, 
+    {
+      "timepoint_category": "Follow-up", 
+      "follow_up_id": "69f27518-f310-412c-87a3-a33fd82ded9b", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "submitter_id": "TCGA-50-5933_follow_up2", 
+      "disease_response": "TF-Tumor Free", 
+      "days_to_follow_up": 2370, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T14:40:24.502190-06:00"
+    }, 
+    {
+      "timepoint_category": "Last Contact", 
+      "follow_up_id": "cb779a46-5d42-4a0e-aa3b-72302d8e1770", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "submitter_id": "TCGA-50-5933_follow_up", 
+      "disease_response": "TF-Tumor Free", 
+      "days_to_follow_up": 2393, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T14:40:24.502190-06:00"
+    }
+  ], 
+  "index_date": "Diagnosis", 
+  "state": "released"
+}]

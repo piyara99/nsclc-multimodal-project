@@ -1,0 +1,515 @@
+[{
+  "lost_to_followup": "No", 
+  "disease_type": "Adenomas and Adenocarcinomas", 
+  "project": {
+    "project_id": "TCGA-LUAD"
+  }, 
+  "submitter_id": "TCGA-73-4659", 
+  "diagnoses": [
+    {
+      "synchronous_malignancy": "No", 
+      "ajcc_pathologic_stage": "Stage IIIA", 
+      "days_to_diagnosis": 0, 
+      "laterality": "Right", 
+      "treatments": [
+        {
+          "days_to_treatment_end": 581, 
+          "days_to_treatment_start": 539, 
+          "route_of_administration": [
+            "Intravenous"
+          ], 
+          "number_of_cycles": 2, 
+          "submitter_id": "TCGA-73-4659_treatment10", 
+          "treatment_id": "25be8c44-90ae-4cc5-a805-56a882a16d58", 
+          "treatment_type": "Chemotherapy", 
+          "therapeutic_agents": "Gemcitabine", 
+          "treatment_or_therapy": "yes", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+          "initial_disease_status": "Progressive Disease", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "state": "released"
+        }, 
+        {
+          "days_to_treatment_end": 581, 
+          "treatment_dose": 300, 
+          "days_to_treatment_start": 546, 
+          "route_of_administration": [
+            "Intravenous"
+          ], 
+          "number_of_cycles": 2, 
+          "submitter_id": "TCGA-73-4659_treatment9", 
+          "treatment_id": "5643ed1e-0d54-4a7e-938e-e31fbf3e5074", 
+          "treatment_type": "Chemotherapy", 
+          "therapeutic_agents": "Cisplatin", 
+          "treatment_or_therapy": "yes", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+          "initial_disease_status": "Progressive Disease", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "state": "released", 
+          "treatment_dose_units": "mg"
+        }, 
+        {
+          "days_to_treatment_end": 529, 
+          "course_number": 2.0, 
+          "treatment_dose": 3000, 
+          "days_to_treatment_start": 516, 
+          "submitter_id": "TCGA-73-4659_treatment2", 
+          "treatment_id": "99a16f13-625e-4df8-9ef5-35b2e828c655", 
+          "treatment_type": "Radiation, External Beam", 
+          "treatment_or_therapy": "yes", 
+          "number_of_fractions": 10.0, 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+          "treatment_anatomic_sites": [
+            "Regional Site"
+          ], 
+          "treatment_intent_type": "Palliative", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "state": "released", 
+          "treatment_dose_units": "cGy"
+        }, 
+        {
+          "days_to_treatment_end": 609, 
+          "treatment_dose": 200, 
+          "days_to_treatment_start": 602, 
+          "route_of_administration": [
+            "Intravenous"
+          ], 
+          "number_of_cycles": 2, 
+          "submitter_id": "TCGA-73-4659_treatment3", 
+          "treatment_id": "9b723b86-5564-4660-bad7-d4107c7752e1", 
+          "treatment_type": "Chemotherapy", 
+          "therapeutic_agents": "Paclitaxel", 
+          "treatment_or_therapy": "yes", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+          "initial_disease_status": "Progressive Disease", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "state": "released", 
+          "treatment_dose_units": "mg"
+        }, 
+        {
+          "days_to_treatment_end": 406, 
+          "prescribed_dose_units": "mg", 
+          "treatment_dose": 9000, 
+          "days_to_treatment_start": 312, 
+          "route_of_administration": [
+            "Oral"
+          ], 
+          "number_of_cycles": 5, 
+          "submitter_id": "TCGA-73-4659_treatment7", 
+          "treatment_id": "9e5da961-9c09-47da-b35d-2e3ff95d70e1", 
+          "treatment_type": "Targeted Molecular Therapy", 
+          "prescribed_dose": 150.0, 
+          "therapeutic_agents": "Erlotinib", 
+          "treatment_or_therapy": "yes", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+          "initial_disease_status": "Progressive Disease", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "state": "released", 
+          "treatment_dose_units": "mg"
+        }, 
+        {
+          "days_to_treatment_end": 298, 
+          "prescribed_dose_units": "mg/m2", 
+          "treatment_dose": 3000, 
+          "days_to_treatment_start": 257, 
+          "route_of_administration": [
+            "Intravenous"
+          ], 
+          "number_of_cycles": 3, 
+          "submitter_id": "TCGA-73-4659_treatment5", 
+          "treatment_id": "b42f4f96-a2f8-4646-b0b3-c9757fef5683", 
+          "treatment_type": "Chemotherapy", 
+          "prescribed_dose": 500.0, 
+          "therapeutic_agents": "Pemetrexed Disodium", 
+          "treatment_or_therapy": "yes", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+          "initial_disease_status": "Progressive Disease", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "state": "released", 
+          "treatment_dose_units": "mg"
+        }, 
+        {
+          "days_to_treatment_end": 337, 
+          "course_number": 1.0, 
+          "treatment_dose": 2200, 
+          "days_to_treatment_start": 337, 
+          "submitter_id": "TCGA-73-4659_treatment", 
+          "treatment_id": "c18830d1-ed85-5248-a842-a7e7550bd2b2", 
+          "treatment_type": "Radiation, Stereotactic/Gamma Knife/SRS", 
+          "treatment_or_therapy": "yes", 
+          "number_of_fractions": 1.0, 
+          "initial_disease_status": "Progressive Disease", 
+          "treatment_anatomic_sites": [
+            "Distant Site"
+          ], 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "state": "released", 
+          "treatment_dose_units": "cGy"
+        }, 
+        {
+          "days_to_treatment_end": 452, 
+          "treatment_dose": 300, 
+          "days_to_treatment_start": 410, 
+          "route_of_administration": [
+            "Intravenous"
+          ], 
+          "number_of_cycles": 2, 
+          "submitter_id": "TCGA-73-4659_treatment6", 
+          "treatment_id": "c2c7771c-3e24-49b8-b721-e5c1b04cb829", 
+          "treatment_type": "Chemotherapy", 
+          "therapeutic_agents": "Vinorelbine", 
+          "treatment_or_therapy": "yes", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+          "initial_disease_status": "Progressive Disease", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "state": "released", 
+          "treatment_dose_units": "mg"
+        }, 
+        {
+          "days_to_treatment_end": 494, 
+          "treatment_dose": 150, 
+          "days_to_treatment_start": 473, 
+          "route_of_administration": [
+            "Intravenous"
+          ], 
+          "number_of_cycles": 4, 
+          "submitter_id": "TCGA-73-4659_treatment8", 
+          "treatment_id": "deb5acf8-0cdd-49a4-922d-a2177971b4bd", 
+          "treatment_type": "Chemotherapy", 
+          "therapeutic_agents": "Docetaxel", 
+          "treatment_or_therapy": "yes", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+          "initial_disease_status": "Progressive Disease", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "state": "released", 
+          "treatment_dose_units": "mg"
+        }, 
+        {
+          "days_to_treatment_end": 657, 
+          "prescribed_dose_units": "mg", 
+          "treatment_dose": 15120, 
+          "days_to_treatment_start": 624, 
+          "route_of_administration": [
+            "Oral"
+          ], 
+          "number_of_cycles": 3, 
+          "submitter_id": "TCGA-73-4659_treatment4", 
+          "treatment_id": "fd94b1a9-d30c-4666-af0f-e72dc2986880", 
+          "treatment_type": "Pharmaceutical Therapy, NOS", 
+          "prescribed_dose": 720.0, 
+          "therapeutic_agents": "Aurora Kinase/VEGFR2 Inhibitor CYC116", 
+          "treatment_or_therapy": "yes", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+          "initial_disease_status": "Not Reported", 
+          "treatment_intent_type": "Not Reported", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "state": "released", 
+          "treatment_dose_units": "mg"
+        }
+      ], 
+      "tissue_or_organ_of_origin": "Lung, NOS", 
+      "days_to_last_follow_up": 711.0, 
+      "age_at_diagnosis": 24253, 
+      "primary_diagnosis": "Adenocarcinoma, NOS", 
+      "updated_datetime": "2025-10-24T10:05:51.248574-05:00", 
+      "prior_malignancy": "no", 
+      "year_of_diagnosis": 2006, 
+      "prior_treatment": "No", 
+      "state": "released", 
+      "diagnosis_is_primary_disease": "true", 
+      "ajcc_staging_system_edition": "6th", 
+      "ajcc_pathologic_t": "T2", 
+      "morphology": "8140/3", 
+      "ajcc_pathologic_n": "N2", 
+      "ajcc_pathologic_m": "M0", 
+      "submitter_id": "TCGA-73-4659_diagnosis", 
+      "classification_of_tumor": "primary", 
+      "residual_disease": "R0", 
+      "pathology_details": [
+        {
+          "consistent_pathology_review": "Yes", 
+          "pathology_detail_id": "6d61a650-94b3-45b0-aa9e-b723a01e689f", 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-73-4659_pathology_detail", 
+          "state": "released", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00"
+        }
+      ], 
+      "diagnosis_id": "28287ed6-5c08-570e-a9d1-2e41547ad187", 
+      "icd_10_code": "C34.1", 
+      "site_of_resection_or_biopsy": "Lung, NOS", 
+      "sites_of_involvement": [
+        "Central Lung"
+      ]
+    }, 
+    {
+      "morphology": "Not Reported", 
+      "submitter_id": "TCGA-73-4659_diagnosis2", 
+      "days_to_diagnosis": 35, 
+      "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+      "treatments": [
+        {
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-73-4659_treatment11", 
+          "treatment_id": "13654918-73f6-4dc1-ae81-0784527bb9f1", 
+          "treatment_type": "Pharmaceutical Therapy, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "yes", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+          "initial_disease_status": "Not Reported"
+        }, 
+        {
+          "treatment_anatomic_sites": [
+            "Locoregional Site"
+          ], 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-73-4659_treatment13", 
+          "treatment_id": "9741b885-2a17-4ecb-98f1-76366b284f17", 
+          "treatment_type": "Surgery, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "no", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00"
+        }, 
+        {
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-73-4659_treatment12", 
+          "treatment_id": "fea64ec4-08d5-4469-b31c-9b7391f522a5", 
+          "treatment_type": "Radiation Therapy, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "yes", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+          "initial_disease_status": "Not Reported"
+        }
+      ], 
+      "tissue_or_organ_of_origin": "Not Reported", 
+      "age_at_diagnosis": 24288, 
+      "primary_diagnosis": "Not Reported", 
+      "classification_of_tumor": "not reported", 
+      "tumor_of_origin": "TCGA-73-4659_diagnosis", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "diagnosis_id": "400f1aea-39f4-434c-933d-994b0194ccd5", 
+      "site_of_resection_or_biopsy": "Not Reported", 
+      "prior_treatment": "Yes", 
+      "state": "released", 
+      "diagnosis_is_primary_disease": "false"
+    }, 
+    {
+      "morphology": "8140/3", 
+      "submitter_id": "TCGA-73-4659_diagnosis4", 
+      "days_to_diagnosis": 316, 
+      "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+      "treatments": [
+        {
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-73-4659_treatment18", 
+          "treatment_id": "1faa3d7e-54cd-44e6-80a7-87ed00f48e08", 
+          "treatment_type": "Radiation Therapy, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "yes", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+          "initial_disease_status": "Progressive Disease"
+        }, 
+        {
+          "treatment_anatomic_sites": [
+            "Distant Site"
+          ], 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-73-4659_treatment19", 
+          "treatment_id": "3ba8a70b-b372-444e-b5fa-96f6517083ce", 
+          "treatment_type": "Surgery, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "no", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00"
+        }, 
+        {
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-73-4659_treatment17", 
+          "treatment_id": "d93911c0-8a63-40ea-8958-0c97b6440e06", 
+          "treatment_type": "Pharmaceutical Therapy, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "no", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+          "initial_disease_status": "Progressive Disease"
+        }
+      ], 
+      "tissue_or_organ_of_origin": "Not Reported", 
+      "age_at_diagnosis": 24569, 
+      "primary_diagnosis": "Adenocarcinoma, NOS", 
+      "classification_of_tumor": "metastasis", 
+      "tumor_of_origin": "TCGA-73-4659_diagnosis", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "diagnosis_id": "536d4d35-a014-498b-be8c-00fae3586780", 
+      "site_of_resection_or_biopsy": "Not Reported", 
+      "prior_treatment": "Yes", 
+      "state": "released", 
+      "diagnosis_is_primary_disease": "false"
+    }, 
+    {
+      "morphology": "8140/3", 
+      "submitter_id": "TCGA-73-4659_diagnosis3", 
+      "days_to_diagnosis": 47, 
+      "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+      "treatments": [
+        {
+          "treatment_anatomic_sites": [
+            "Locoregional Site"
+          ], 
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-73-4659_treatment16", 
+          "treatment_id": "09611bb2-0d9c-4cd0-9cd1-158cf21a5d44", 
+          "treatment_type": "Surgery, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "no", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00"
+        }, 
+        {
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-73-4659_treatment15", 
+          "treatment_id": "42258705-6328-43cc-982b-76f6d9de8193", 
+          "treatment_type": "Radiation Therapy, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "no", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+          "initial_disease_status": "Recurrent Disease"
+        }, 
+        {
+          "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+          "submitter_id": "TCGA-73-4659_treatment14", 
+          "treatment_id": "5593ecf3-7881-4143-bcb0-47cf10739b8b", 
+          "treatment_type": "Pharmaceutical Therapy, NOS", 
+          "state": "released", 
+          "treatment_or_therapy": "yes", 
+          "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+          "initial_disease_status": "Recurrent Disease"
+        }
+      ], 
+      "tissue_or_organ_of_origin": "Not Reported", 
+      "age_at_diagnosis": 24300, 
+      "primary_diagnosis": "Adenocarcinoma, NOS", 
+      "classification_of_tumor": "recurrence", 
+      "tumor_of_origin": "TCGA-73-4659_diagnosis", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "diagnosis_id": "75081e24-de38-415f-baef-e6ca07d2f09b", 
+      "site_of_resection_or_biopsy": "Not Reported", 
+      "prior_treatment": "Yes", 
+      "state": "released", 
+      "diagnosis_is_primary_disease": "false"
+    }
+  ], 
+  "consent_type": "Consent by Death", 
+  "demographic": {
+    "ethnicity": "not hispanic or latino", 
+    "gender": "male", 
+    "race": "white", 
+    "vital_status": "Dead", 
+    "age_at_index": 66, 
+    "submitter_id": "TCGA-73-4659_demographic", 
+    "days_to_birth": -24253, 
+    "demographic_id": "ec90791b-e6c0-5e62-8dc4-7b721ae1e5db", 
+    "age_is_obfuscated": "false", 
+    "updated_datetime": "2025-10-16T15:38:26.614685-05:00", 
+    "days_to_death": 711, 
+    "state": "released", 
+    "sex_at_birth": "male", 
+    "country_of_residence_at_enrollment": "United States"
+  }, 
+  "exposures": [
+    {
+      "tobacco_smoking_quit_year": 1986, 
+      "tobacco_smoking_status": "Current Reformed Smoker for > 15 yrs", 
+      "updated_datetime": "2025-01-16T14:30:40.181262-06:00", 
+      "exposure_id": "a815b8f1-85c7-56cd-a6ae-822d3c5d29be", 
+      "exposure_type": "Tobacco", 
+      "tobacco_smoking_onset_year": 1974, 
+      "submitter_id": "TCGA-73-4659_exposure", 
+      "state": "released", 
+      "pack_years_smoked": 12.0
+    }
+  ], 
+  "primary_site": "Bronchus and lung", 
+  "updated_datetime": "2025-01-06T14:56:25.069516-06:00", 
+  "case_id": "cd0dc947-b708-464e-beb7-954c9d4583e7", 
+  "follow_ups": [
+    {
+      "timepoint_category": "Follow-up", 
+      "follow_up_id": "17b7745c-eaef-4285-ae0b-585e54e16ac4", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "submitter_id": "TCGA-73-4659_follow_up2", 
+      "disease_response": "WT-With Tumor", 
+      "days_to_follow_up": 711, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T14:56:25.069516-06:00"
+    }, 
+    {
+      "timepoint_category": "Post Initial Treatment", 
+      "follow_up_id": "21fb2648-49aa-4bb8-bde0-c13e6e0cb517", 
+      "progression_or_recurrence_anatomic_site": "Not Reported", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "progression_or_recurrence_type": "Unknown", 
+      "submitter_id": "TCGA-73-4659_follow_up5", 
+      "days_to_follow_up": 35, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+      "progression_or_recurrence": "Yes"
+    }, 
+    {
+      "evidence_of_recurrence_type": "Convincing Image Source", 
+      "days_to_recurrence": 47, 
+      "timepoint_category": "Post Initial Treatment", 
+      "follow_up_id": "22e3a1d5-5d5d-4e7a-b791-cb0c5c1e05a2", 
+      "progression_or_recurrence_anatomic_site": "Not Reported", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "progression_or_recurrence_type": "Locoregional", 
+      "submitter_id": "TCGA-73-4659_follow_up6", 
+      "days_to_follow_up": 47, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+      "progression_or_recurrence": "Yes"
+    }, 
+    {
+      "karnofsky_performance_status": "0", 
+      "timepoint_category": "Other", 
+      "follow_up_id": "34d6f8fa-a0ff-490a-9c9f-69b813ea70a4", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "submitter_id": "TCGA-73-4659_follow_up4", 
+      "state": "released", 
+      "created_datetime": "2025-01-06T14:56:25.069516-06:00"
+    }, 
+    {
+      "karnofsky_performance_status": "90", 
+      "timepoint_category": "Other", 
+      "follow_up_id": "45c257b4-52de-4f0a-836b-b8f747768180", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "ecog_performance_status": "0", 
+      "submitter_id": "TCGA-73-4659_follow_up3", 
+      "state": "released", 
+      "created_datetime": "2025-01-06T14:56:25.069516-06:00"
+    }, 
+    {
+      "timepoint_category": "Last Contact", 
+      "follow_up_id": "4bb34ab1-91bc-44ef-b5a4-858a6dcd2fd7", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "submitter_id": "TCGA-73-4659_follow_up", 
+      "disease_response": "WT-With Tumor", 
+      "days_to_follow_up": 711, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T14:56:25.069516-06:00"
+    }, 
+    {
+      "days_to_progression": 316, 
+      "timepoint_category": "Post Initial Treatment", 
+      "evidence_of_progression_type": "Convincing Image Source", 
+      "follow_up_id": "d2890f55-14c6-45fe-a240-0f273fd2efdf", 
+      "progression_or_recurrence_anatomic_site": "Not Reported", 
+      "updated_datetime": "2025-01-08T13:14:10.173598-06:00", 
+      "progression_or_recurrence_type": "Distant", 
+      "submitter_id": "TCGA-73-4659_follow_up7", 
+      "days_to_follow_up": 316, 
+      "state": "released", 
+      "created_datetime": "2025-01-06T14:56:25.069516-06:00", 
+      "progression_or_recurrence": "Yes"
+    }
+  ], 
+  "index_date": "Diagnosis", 
+  "state": "released"
+}]
