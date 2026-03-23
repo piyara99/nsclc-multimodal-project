@@ -1,24 +1,15 @@
 """
-Fusion Model Training Script.
+Improved Fusion Model Training — Weighted Average Fusion.
 
-Trains three model variants for binary recurrence prediction:
-    1. fusion       — image embeddings + clinical features (main model)
-    2. image_only   — ablation: image embeddings only
-    3. clinical_only— ablation: clinical features only
+Changes from v1:
+    - WeightedFusionModel: learnable alpha blends image/clinical logits
+    - Focal loss replaces BCE for better handling of class imbalance
+    - Epochs 60 -> 120, LR 5e-4 -> 1e-4, Dropout 0.3 -> 0.4
+    - CosineAnnealingWarmRestarts scheduler
+    - Gradient clipping for stability
 
-For each variant, runs stratified k-fold cross-validation and
-saves performance metrics for comparison in the final report.
-
-Usage (from project root, nsclc env active):
+Usage:
     python src/train_fusion.py
-
-Outputs:
-    outputs/models/fusion_best.pth
-    outputs/models/image_only_best.pth
-    outputs/models/clinical_only_best.pth
-    outputs/results/fusion_comparison.json
-    outputs/figures/fusion_roc_curves.png
-    outputs/figures/fusion_training_curves.png
 """
 
 import os
@@ -32,7 +23,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import (
     roc_auc_score, f1_score, accuracy_score,
-    precision_score, recall_score, roc_curve
+    precision_score, recall_score, roc_curve,
 )
 import matplotlib
 matplotlib.use("Agg")
@@ -43,114 +34,141 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.preprocess.clinical_processor import ClinicalProcessor
 from src.models.fusion_model import build_fusion_model
 
-# ─── Configuration ────────────────────────────────────────────────────────────
+# ─── Config ───────────────────────────────────────────────────────────────────
 
 CONFIG = {
-    "clinical_csv"      : "data/metadata/tcga_clinical_master.csv",
-    "embeddings_path"   : "data/features/image_embeddings.npy",
-    "labels_path"       : "data/features/image_labels.npy",
-    "model_dir"         : "outputs/models",
-    "figures_dir"       : "outputs/figures",
-    "results_dir"       : "outputs/results",
+    "clinical_csv"       : "data/metadata/tcga_clinical_master.csv",
+    "embeddings_path"    : "data/features/image_embeddings.npy",
+    "labels_path"        : "data/features/image_labels.npy",
+    "model_dir"          : "outputs/models",
+    "figures_dir"        : "outputs/figures",
+    "results_dir"        : "outputs/results",
 
-    "clinical_input_dim": 5,
+    "clinical_input_dim" : 5,
     "image_embedding_dim": 256,
-    "dropout"           : 0.3,
+    "dropout"            : 0.4,
 
-    "epochs"            : 60,
-    "batch_size"        : 8,       # small — only 38 patients
-    "learning_rate"     : 5e-4,
-    "weight_decay"      : 1e-3,
-    "n_folds"           : 5,       # stratified k-fold
+    "epochs"             : 120,
+    "batch_size"         : 16,
+    "learning_rate"      : 1e-4,
+    "weight_decay"       : 1e-3,
+    "n_folds"            : 5,
+    "T_0"                : 30,
 
-    "seed"              : 42,
-    "device"            : "cuda" if torch.cuda.is_available() else "cpu",
+    "seed"               : 42,
+    "device"             : "cuda" if torch.cuda.is_available() else "cpu",
 }
 
 torch.manual_seed(CONFIG["seed"])
 np.random.seed(CONFIG["seed"])
 
 
-# ─── Data preparation ─────────────────────────────────────────────────────────
+# ─── Weighted Average Fusion Model ────────────────────────────────────────────
 
-def load_clinical_data():
-    """Load and preprocess clinical features and labels."""
+class WeightedFusionModel(nn.Module):
+    """
+    Weighted average fusion — each modality produces independent logits,
+    combined via a learnable scalar alpha (clamped to [0.1, 0.9]).
+
+    More principled than fixed concatenation: the model learns how much
+    to trust each modality for this specific dataset.
+    """
+
+    def __init__(
+        self,
+        image_embedding_dim: int = 256,
+        clinical_input_dim: int = 5,
+        hidden_dim: int = 128,
+        dropout: float = 0.4,
+    ):
+        super().__init__()
+
+        self.image_branch = nn.Sequential(
+            nn.Linear(image_embedding_dim, hidden_dim),
+            nn.BatchNorm1d(hidden_dim),
+            nn.ReLU(inplace=True),
+            nn.Dropout(dropout),
+            nn.Linear(hidden_dim, 64),
+            nn.BatchNorm1d(64),
+            nn.ReLU(inplace=True),
+            nn.Dropout(dropout),
+            nn.Linear(64, 1),
+        )
+
+        self.clinical_branch = nn.Sequential(
+            nn.Linear(clinical_input_dim, 32),
+            nn.BatchNorm1d(32),
+            nn.ReLU(inplace=True),
+            nn.Dropout(dropout),
+            nn.Linear(32, 64),
+            nn.BatchNorm1d(64),
+            nn.ReLU(inplace=True),
+            nn.Dropout(dropout),
+            nn.Linear(64, 1),
+        )
+
+        # Learnable fusion weight, initialised at 0.5 (equal weighting)
+        self.alpha   = nn.Parameter(torch.tensor(0.5))
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, image_emb: torch.Tensor, clinical_feat: torch.Tensor) -> torch.Tensor:
+        img_logit  = self.image_branch(image_emb).squeeze(1)
+        clin_logit = self.clinical_branch(clinical_feat).squeeze(1)
+        alpha      = torch.clamp(self.alpha, 0.1, 0.9)
+        return self.sigmoid(alpha * img_logit + (1 - alpha) * clin_logit)
+
+    def get_modality_weights(self):
+        a = float(torch.clamp(self.alpha, 0.1, 0.9).item())
+        return {"image_weight": round(a, 4), "clinical_weight": round(1 - a, 4)}
+
+
+# ─── Focal Loss ───────────────────────────────────────────────────────────────
+
+class FocalLoss(nn.Module):
+    """Binary focal loss — downweights easy examples, focuses on hard ones."""
+
+    def __init__(self, alpha: float = 0.75, gamma: float = 2.0):
+        super().__init__()
+        self.alpha = alpha
+        self.gamma = gamma
+
+    def forward(self, probs: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+        bce   = nn.functional.binary_cross_entropy(probs, targets, reduction="none")
+        pt    = torch.where(targets == 1, probs, 1 - probs)
+        alpha = torch.where(
+            targets == 1,
+            torch.full_like(targets, self.alpha),
+            torch.full_like(targets, 1 - self.alpha),
+        )
+        return (alpha * (1 - pt) ** self.gamma * bce).mean()
+
+
+# ─── Data ─────────────────────────────────────────────────────────────────────
+
+def load_and_match_data():
     processor = ClinicalProcessor(CONFIG["clinical_csv"])
-    X_clin, y, feature_names = processor.get_features_and_labels(fit_scaler=True)
-    class_weights = processor.get_class_weights_tensor()
-    return X_clin, y, feature_names, class_weights, processor
+    X_clin, y_clin, feature_names, *_ = processor.get_features_and_labels(fit_scaler=True)
 
+    img_embeddings = np.load(CONFIG["embeddings_path"]).astype(np.float32)
+    img_labels     = np.load(CONFIG["labels_path"])
 
-def load_image_embeddings():
-    """Load pre-extracted image embeddings and their labels."""
-    embeddings = np.load(CONFIG["embeddings_path"])  # (10000, 256)
-    labels     = np.load(CONFIG["labels_path"])      # (10000,)
-    return embeddings, labels
-
-
-def match_clinical_to_images(X_clin, y_clin, img_embeddings, img_labels):
-    """
-    For each clinical patient, assign one representative image embedding.
-
-    Strategy: For each clinical patient (labelled by subtype 0=LUAD/1=LUSC),
-    randomly sample one image embedding from the matching subtype pool.
-    This creates a paired (image_embedding, clinical_features, label) dataset.
-
-    Note: In a real clinical setting, the image would be the patient's own WSI.
-    Here we use subtype-matched sampling as a principled proxy since we do not
-    have per-patient WSI-to-clinical linkage in the Kaggle dataset.
-
-    Returns:
-        X_img_matched  : (N_patients, 256)
-        X_clin_matched : (N_patients, 5)
-        y_matched      : (N_patients,) — recurrence labels
-    """
     np.random.seed(CONFIG["seed"])
-
-    X_img_matched  = []
-    X_clin_matched = []
-    y_matched      = []
-
-    # subtype column index in clinical features: index 2 = subtype
-    SUBTYPE_IDX = 2
+    X_img_matched = []
+    SUBTYPE_IDX   = 2
 
     for i in range(len(y_clin)):
-        clin_feat = X_clin[i]           # (5,)
-        label     = y_clin[i]           # 0 or 1
+        sv          = int(round(float(X_clin[i][SUBTYPE_IDX])))
+        img_subtype = 0 if sv <= 0 else 1
+        pool        = np.where(img_labels == img_subtype)[0]
+        X_img_matched.append(img_embeddings[np.random.choice(pool)])
 
-        # Infer subtype from clinical feature (after scaling, use raw subtype)
-        # We use img_labels directly: 0=LUAD, 1=LUSC
-        # Match on subtype: use LUAD images for LUAD patients, LUSC for LUSC
-        # subtype is stored as a scaled value — use original label pool split
-        # For simplicity: first half of clinical data tends to be LUAD,
-        # but we'll use img_labels to find matching subtype images properly.
+    X_img_matched = np.array(X_img_matched, dtype=np.float32)
 
-        # Use LUAD images (label=0) for first subtype, LUSC (label=1) for second
-        # We check the raw clinical CSV subtype implicitly via img_labels
-        subtype_val = int(round(float(clin_feat[SUBTYPE_IDX])))
-        # After StandardScaler, values are centered — use sign to infer class
-        # Better: use the original unscaled subtype. We'll do it via modulo:
-        # clinical patients are ordered: first N_LUAD are LUAD, rest are LUSC
-        # Actually, use a direct approach: sample from matching image pool
-        img_subtype = 0 if subtype_val <= 0 else 1
-        pool_indices = np.where(img_labels == img_subtype)[0]
+    print(f"\n[Data] Patients  : {len(y_clin)}")
+    print(f"[Data] Balance   : {dict(zip(*np.unique(y_clin, return_counts=True)))}")
+    print(f"[Data] Features  : {feature_names}")
 
-        chosen_idx = np.random.choice(pool_indices)
-        X_img_matched.append(img_embeddings[chosen_idx])
-        X_clin_matched.append(clin_feat)
-        y_matched.append(label)
-
-    X_img_matched  = np.array(X_img_matched,  dtype=np.float32)
-    X_clin_matched = np.array(X_clin_matched, dtype=np.float32)
-    y_matched      = np.array(y_matched,       dtype=np.int64)
-
-    print(f"\n[Data Matching] Paired dataset: {len(y_matched)} patients")
-    print(f"  Image embeddings shape  : {X_img_matched.shape}")
-    print(f"  Clinical features shape : {X_clin_matched.shape}")
-    print(f"  Recurrence distribution : "
-          f"{dict(zip(*np.unique(y_matched, return_counts=True)))}")
-
-    return X_img_matched, X_clin_matched, y_matched
+    return X_img_matched, X_clin, y_clin, feature_names, processor
 
 
 # ─── Training helpers ─────────────────────────────────────────────────────────
@@ -159,264 +177,218 @@ def train_epoch(model, loader, criterion, optimizer, device):
     model.train()
     total_loss = 0.0
     for img_emb, clin_feat, labels in loader:
-        img_emb    = img_emb.to(device)
-        clin_feat  = clin_feat.to(device)
-        labels     = labels.float().to(device)
-
+        img_emb, clin_feat, labels = (
+            img_emb.to(device), clin_feat.to(device), labels.float().to(device)
+        )
         optimizer.zero_grad()
         probs = model(img_emb, clin_feat)
         loss  = criterion(probs, labels)
         loss.backward()
+        nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
         optimizer.step()
         total_loss += loss.item() * img_emb.size(0)
-
     return total_loss / len(loader.dataset)
 
 
 @torch.no_grad()
 def eval_epoch(model, loader, criterion, device):
     model.eval()
-    total_loss = 0.0
-    all_probs, all_labels = [], []
-
+    total_loss, all_probs, all_labels = 0.0, [], []
     for img_emb, clin_feat, labels in loader:
-        img_emb   = img_emb.to(device)
-        clin_feat = clin_feat.to(device)
-        labels_f  = labels.float().to(device)
-
+        img_emb, clin_feat = img_emb.to(device), clin_feat.to(device)
         probs = model(img_emb, clin_feat)
-        loss  = criterion(probs, labels_f)
-
+        loss  = criterion(probs, labels.float().to(device))
         total_loss += loss.item() * img_emb.size(0)
         all_probs.extend(probs.cpu().numpy())
         all_labels.extend(labels.numpy())
 
-    avg_loss = total_loss / len(loader.dataset)
     all_probs  = np.array(all_probs)
     all_labels = np.array(all_labels)
     preds      = (all_probs > 0.5).astype(int)
 
-    metrics = {
-        "loss"     : avg_loss,
-        "accuracy" : accuracy_score(all_labels, preds),
-        "auc"      : roc_auc_score(all_labels, all_probs)
-                     if len(np.unique(all_labels)) > 1 else 0.5,
-        "f1"       : f1_score(all_labels, preds, zero_division=0),
-        "precision": precision_score(all_labels, preds, zero_division=0),
-        "recall"   : recall_score(all_labels, preds, zero_division=0),
-    }
-    return metrics, all_probs, all_labels
+    return {
+        "loss"      : total_loss / len(loader.dataset),
+        "accuracy"  : accuracy_score(all_labels, preds),
+        "auc"       : roc_auc_score(all_labels, all_probs)
+                      if len(np.unique(all_labels)) > 1 else 0.5,
+        "f1"        : f1_score(all_labels, preds, zero_division=0),
+        "precision" : precision_score(all_labels, preds, zero_division=0),
+        "recall"    : recall_score(all_labels, preds, zero_division=0),
+    }, all_probs, all_labels
 
 
-# ─── K-Fold training ──────────────────────────────────────────────────────────
+# ─── K-Fold ───────────────────────────────────────────────────────────────────
 
-def train_model_kfold(
-    model_type: str,
-    X_img: np.ndarray,
-    X_clin: np.ndarray,
-    y: np.ndarray,
-    class_weights: torch.Tensor,
-    device: torch.device,
-):
-    """
-    Train a model variant using stratified k-fold cross-validation.
-    Returns aggregated metrics and the best model state dict.
-    """
-    print(f"\n{'='*60}")
-    print(f" Training: {model_type.upper()}")
-    print(f"{'='*60}")
+def train_kfold(model_type, X_img, X_clin, y, device):
+    print(f"\n{'='*60}\n Training: {model_type.upper()}\n{'='*60}")
 
-    skf = StratifiedKFold(
-        n_splits=CONFIG["n_folds"], shuffle=True, random_state=CONFIG["seed"]
-    )
-
-    fold_metrics = []
+    skf            = StratifiedKFold(n_splits=CONFIG["n_folds"], shuffle=True,
+                                     random_state=CONFIG["seed"])
+    fold_metrics   = []
     all_val_probs  = []
     all_val_labels = []
     best_auc       = 0.0
     best_state     = None
-    train_loss_history = []
-    val_loss_history   = []
+    tr_l_last, vl_l_last = [], []
 
-    for fold, (train_idx, val_idx) in enumerate(skf.split(X_img, y)):
+    for fold, (tr_idx, vl_idx) in enumerate(skf.split(X_img, y)):
         print(f"\n  Fold {fold+1}/{CONFIG['n_folds']}")
 
-        # Build tensors
-        X_img_tr  = torch.tensor(X_img[train_idx],  dtype=torch.float32)
-        X_clin_tr = torch.tensor(X_clin[train_idx], dtype=torch.float32)
-        y_tr      = torch.tensor(y[train_idx],       dtype=torch.float32)
-
-        X_img_val  = torch.tensor(X_img[val_idx],  dtype=torch.float32)
-        X_clin_val = torch.tensor(X_clin[val_idx], dtype=torch.float32)
-        y_val      = torch.tensor(y[val_idx],       dtype=torch.float32)
-
-        train_ds = TensorDataset(X_img_tr, X_clin_tr, y_tr)
-        val_ds   = TensorDataset(X_img_val, X_clin_val, y_val)
-
-        train_loader = DataLoader(
-            train_ds, batch_size=CONFIG["batch_size"], shuffle=True
+        tr_ds = TensorDataset(
+            torch.tensor(X_img[tr_idx],  dtype=torch.float32),
+            torch.tensor(X_clin[tr_idx], dtype=torch.float32),
+            torch.tensor(y[tr_idx],      dtype=torch.float32),
         )
-        val_loader = DataLoader(
-            val_ds, batch_size=CONFIG["batch_size"], shuffle=False
+        vl_ds = TensorDataset(
+            torch.tensor(X_img[vl_idx],  dtype=torch.float32),
+            torch.tensor(X_clin[vl_idx], dtype=torch.float32),
+            torch.tensor(y[vl_idx],      dtype=torch.float32),
         )
+        tr_loader = DataLoader(tr_ds, batch_size=CONFIG["batch_size"], shuffle=True)
+        vl_loader = DataLoader(vl_ds, batch_size=CONFIG["batch_size"], shuffle=False)
 
-        # Build fresh model per fold
-        model = build_fusion_model(
-            model_type=model_type,
-            image_embedding_dim=CONFIG["image_embedding_dim"],
-            clinical_input_dim=CONFIG["clinical_input_dim"],
-            dropout=CONFIG["dropout"],
-        ).to(device)
+        # Build model
+        if model_type == "fusion":
+            model = WeightedFusionModel(
+                image_embedding_dim=CONFIG["image_embedding_dim"],
+                clinical_input_dim=CONFIG["clinical_input_dim"],
+                dropout=CONFIG["dropout"],
+            ).to(device)
+            n_pos    = int(y[tr_idx].sum())
+            n_neg    = len(tr_idx) - n_pos
+            alpha_fl = n_neg / (n_pos + n_neg) if n_pos > 0 else 0.75
+            criterion = FocalLoss(alpha=alpha_fl, gamma=2.0)
+        else:
+            model = build_fusion_model(
+                model_type=model_type,
+                image_embedding_dim=CONFIG["image_embedding_dim"],
+                clinical_input_dim=CONFIG["clinical_input_dim"],
+                dropout=CONFIG["dropout"],
+            ).to(device)
+            n_total  = len(tr_idx)
+            n_pos    = int(y[tr_idx].sum())
+            n_neg    = n_total - n_pos
+            w1       = n_total / (2.0 * n_pos) if n_pos > 0 else 1.0
+            criterion = nn.BCELoss(
+                weight=torch.tensor(w1, dtype=torch.float32).to(device)
+            )
 
-        criterion = nn.BCELoss(
-            weight=class_weights[1].to(device)
-        )
         optimizer = optim.AdamW(
             model.parameters(),
             lr=CONFIG["learning_rate"],
             weight_decay=CONFIG["weight_decay"],
         )
-        scheduler = optim.lr_scheduler.CosineAnnealingLR(
-            optimizer, T_max=CONFIG["epochs"], eta_min=1e-6
+        scheduler = optim.lr_scheduler.CosineAnnealingWarmRestarts(
+            optimizer, T_0=CONFIG["T_0"], T_mult=1, eta_min=1e-6
         )
 
-        fold_train_losses = []
-        fold_val_losses   = []
-        best_fold_auc     = 0.0
-        best_fold_state   = None
+        best_fold_auc, best_fold_state = 0.0, None
+        fold_tr_l, fold_vl_l = [], []
 
         for epoch in range(1, CONFIG["epochs"] + 1):
-            tr_loss = train_epoch(model, train_loader, criterion, optimizer, device)
-            val_metrics, val_probs, val_labs = eval_epoch(
-                model, val_loader, criterion, device
+            tr_loss = train_epoch(model, tr_loader, criterion, optimizer, device)
+            val_met, val_probs, val_labs = eval_epoch(
+                model, vl_loader, criterion, device
             )
-            scheduler.step()
+            scheduler.step(epoch)
+            fold_tr_l.append(tr_loss)
+            fold_vl_l.append(val_met["loss"])
 
-            fold_train_losses.append(tr_loss)
-            fold_val_losses.append(val_metrics["loss"])
-
-            if val_metrics["auc"] > best_fold_auc:
-                best_fold_auc   = val_metrics["auc"]
+            if val_met["auc"] > best_fold_auc:
+                best_fold_auc   = val_met["auc"]
                 best_fold_state = {k: v.clone() for k, v in model.state_dict().items()}
 
-            if epoch % 10 == 0:
-                print(
-                    f"    Epoch {epoch:3d} | "
-                    f"Train Loss: {tr_loss:.4f} | "
-                    f"Val Loss: {val_metrics['loss']:.4f} | "
-                    f"Val AUC: {val_metrics['auc']:.4f}"
-                )
+            if epoch % 20 == 0:
+                print(f"    Epoch {epoch:3d} | Loss: {tr_loss:.4f} | "
+                      f"AUC: {val_met['auc']:.4f} | F1: {val_met['f1']:.4f}")
 
-        # Load best fold weights for final evaluation
         model.load_state_dict(best_fold_state)
-        val_metrics, val_probs, val_labs = eval_epoch(
-            model, val_loader, criterion, device
+        val_met, val_probs, val_labs = eval_epoch(
+            model, vl_loader, criterion, device
         )
 
-        fold_metrics.append(val_metrics)
+        if model_type == "fusion" and hasattr(model, "get_modality_weights"):
+            w = model.get_modality_weights()
+            print(f"  Learned weights → Image: {w['image_weight']}  "
+                  f"Clinical: {w['clinical_weight']}")
+
+        fold_metrics.append(val_met)
         all_val_probs.extend(val_probs)
         all_val_labels.extend(val_labs)
+        print(f"  Fold {fold+1} → AUC: {val_met['auc']:.4f}  "
+              f"F1: {val_met['f1']:.4f}  Acc: {val_met['accuracy']:.4f}")
 
-        print(
-            f"  Fold {fold+1} best → "
-            f"AUC: {val_metrics['auc']:.4f}  "
-            f"F1: {val_metrics['f1']:.4f}  "
-            f"Acc: {val_metrics['accuracy']:.4f}"
-        )
-
-        # Track global best
-        if val_metrics["auc"] > best_auc:
-            best_auc   = val_metrics["auc"]
+        if val_met["auc"] > best_auc:
+            best_auc   = val_met["auc"]
             best_state = best_fold_state
 
-        # Store curves from last fold only for plotting
         if fold == CONFIG["n_folds"] - 1:
-            train_loss_history = fold_train_losses
-            val_loss_history   = fold_val_losses
+            tr_l_last, vl_l_last = fold_tr_l, fold_vl_l
 
-    # ── Aggregate metrics ──
     agg = {}
     for key in fold_metrics[0]:
         vals = [fm[key] for fm in fold_metrics]
         agg[f"{key}_mean"] = float(np.mean(vals))
         agg[f"{key}_std"]  = float(np.std(vals))
 
-    # Overall AUC across all folds
     all_val_probs  = np.array(all_val_probs)
     all_val_labels = np.array(all_val_labels)
-    if len(np.unique(all_val_labels)) > 1:
-        agg["overall_auc"] = float(roc_auc_score(all_val_labels, all_val_probs))
-    else:
-        agg["overall_auc"] = 0.5
+    agg["overall_auc"] = (
+        float(roc_auc_score(all_val_labels, all_val_probs))
+        if len(np.unique(all_val_labels)) > 1 else 0.5
+    )
 
-    print(f"\n  {'─'*50}")
-    print(f"  {model_type.upper()} Cross-Validation Summary")
-    print(f"  {'─'*50}")
-    print(f"  AUC      : {agg['auc_mean']:.4f} ± {agg['auc_std']:.4f}")
-    print(f"  F1       : {agg['f1_mean']:.4f} ± {agg['f1_std']:.4f}")
-    print(f"  Accuracy : {agg['accuracy_mean']:.4f} ± {agg['accuracy_std']:.4f}")
-    print(f"  Precision: {agg['precision_mean']:.4f} ± {agg['precision_std']:.4f}")
-    print(f"  Recall   : {agg['recall_mean']:.4f} ± {agg['recall_std']:.4f}")
+    print(f"\n  {model_type.upper()} Summary")
+    print(f"  AUC: {agg['auc_mean']:.4f} +/- {agg['auc_std']:.4f}  |  "
+          f"F1: {agg['f1_mean']:.4f}  |  Acc: {agg['accuracy_mean']:.4f}  |  "
+          f"Recall: {agg['recall_mean']:.4f}")
 
-    return agg, best_state, all_val_probs, all_val_labels, \
-           train_loss_history, val_loss_history
+    return agg, best_state, all_val_probs, all_val_labels, tr_l_last, vl_l_last
 
 
 # ─── Plotting ─────────────────────────────────────────────────────────────────
 
-def save_roc_curves(results: dict, probs_dict: dict, labels_dict: dict):
-    """Save ROC curves for all three model variants on one plot."""
+def save_roc_curves(probs_dict, labels_dict):
     fig, ax = plt.subplots(figsize=(8, 6))
-
-    colors = {"fusion": "#2196F3", "image_only": "#FF5722", "clinical_only": "#4CAF50"}
-    labels_map = {
-        "fusion"        : "Fusion (image + clinical)",
-        "image_only"    : "Image only",
-        "clinical_only" : "Clinical only",
+    colors  = {"fusion": "#1565C0", "image_only": "#c62828", "clinical_only": "#2e7d32"}
+    names   = {
+        "fusion":         "Weighted Fusion (image + clinical)",
+        "image_only":     "Image only",
+        "clinical_only":  "Clinical only",
     }
-
-    for model_type, probs in probs_dict.items():
-        labs = labels_dict[model_type]
+    for mt, probs in probs_dict.items():
+        labs = labels_dict[mt]
         if len(np.unique(labs)) < 2:
             continue
         fpr, tpr, _ = roc_curve(labs, probs)
         auc = roc_auc_score(labs, probs)
-        ax.plot(
-            fpr, tpr,
-            color=colors[model_type],
-            linewidth=2,
-            label=f"{labels_map[model_type]} (AUC={auc:.3f})"
-        )
-
+        ax.plot(fpr, tpr, color=colors[mt], linewidth=2,
+                label=f"{names[mt]} (AUC={auc:.3f})")
     ax.plot([0, 1], [0, 1], "k--", linewidth=1, alpha=0.5, label="Random")
     ax.set_xlabel("False Positive Rate", fontsize=12)
     ax.set_ylabel("True Positive Rate", fontsize=12)
     ax.set_title("ROC Curves — Model Comparison", fontsize=13)
     ax.legend(loc="lower right", fontsize=10)
     ax.grid(True, alpha=0.3)
-    ax.set_xlim([0, 1])
-    ax.set_ylim([0, 1.02])
-
     plt.tight_layout()
     path = os.path.join(CONFIG["figures_dir"], "fusion_roc_curves.png")
     plt.savefig(path, dpi=150)
     plt.close()
-    print(f"\nROC curves saved → {path}")
+    print(f"ROC curves saved → {path}")
 
 
-def save_training_curves(train_losses: list, val_losses: list, model_type: str):
-    """Save training/validation loss curve for the fusion model."""
-    epochs = range(1, len(train_losses) + 1)
+def save_training_curves(tr_l, vl_l):
+    epochs = range(1, len(tr_l) + 1)
     fig, ax = plt.subplots(figsize=(8, 5))
-    ax.plot(epochs, train_losses, "b-o", markersize=3, label="Train loss")
-    ax.plot(epochs, val_losses,   "r-o", markersize=3, label="Val loss")
+    ax.plot(epochs, tr_l, color="#1565C0", linewidth=1.5, label="Train loss")
+    ax.plot(epochs, vl_l, color="#c62828", linewidth=1.5, label="Val loss")
     ax.set_xlabel("Epoch")
     ax.set_ylabel("Loss")
-    ax.set_title(f"Training Curves — {model_type}")
+    ax.set_title("Fusion Model Training Curves (Weighted Average Fusion)")
     ax.legend()
     ax.grid(True, alpha=0.3)
     plt.tight_layout()
-    path = os.path.join(CONFIG["figures_dir"], f"{model_type}_training_curves.png")
+    path = os.path.join(CONFIG["figures_dir"], "fusion_training_curves.png")
     plt.savefig(path, dpi=150)
     plt.close()
     print(f"Training curves saved → {path}")
@@ -429,81 +401,57 @@ def main():
         os.makedirs(d, exist_ok=True)
 
     device = torch.device(CONFIG["device"])
+
     print(f"\n{'='*60}")
-    print(f" NSCLC Multimodal Fusion Training")
+    print(f" NSCLC Improved Fusion Training (v2)")
     print(f"{'='*60}")
-    print(f" Device    : {device}")
-    print(f" Folds     : {CONFIG['n_folds']}")
-    print(f" Epochs    : {CONFIG['epochs']}")
-    print(f" Batch size: {CONFIG['batch_size']}")
+    print(f" Device  : {device}")
+    print(f" Epochs  : {CONFIG['epochs']}  LR: {CONFIG['learning_rate']}")
+    print(f" Dropout : {CONFIG['dropout']}  Fusion: weighted average")
     print(f"{'='*60}")
 
-    # ── Load data ──
-    print("\n Loading clinical data...")
-    X_clin, y_clin, feature_names, class_weights, processor = load_clinical_data()
+    X_img, X_clin, y, feature_names, processor = load_and_match_data()
 
-    print("\n Loading image embeddings...")
-    img_embeddings, img_labels = load_image_embeddings()
-
-    print("\n Matching clinical patients to image embeddings...")
-    X_img, X_clin_matched, y = match_clinical_to_images(
-        X_clin, y_clin, img_embeddings, img_labels
-    )
-
-    # ── Train all three variants ──
-    all_results   = {}
-    probs_dict    = {}
-    labels_dict   = {}
+    all_results = {}
+    probs_dict  = {}
+    labels_dict = {}
 
     for model_type in ["fusion", "image_only", "clinical_only"]:
-        metrics, best_state, val_probs, val_labels, tr_losses, val_losses = \
-            train_model_kfold(
-                model_type, X_img, X_clin_matched, y,
-                class_weights, device
-            )
-
+        metrics, best_state, val_probs, val_labels, tr_l, vl_l = train_kfold(
+            model_type, X_img, X_clin, y, device
+        )
         all_results[model_type] = metrics
         probs_dict[model_type]  = val_probs
         labels_dict[model_type] = val_labels
 
-        # Save best model
         save_path = os.path.join(CONFIG["model_dir"], f"{model_type}_best.pth")
         torch.save({
-            "model_type"     : model_type,
-            "model_state"    : best_state,
-            "metrics"        : metrics,
-            "config"         : CONFIG,
-            "feature_names"  : feature_names,
+            "model_type"    : model_type,
+            "model_state"   : best_state,
+            "metrics"       : metrics,
+            "config"        : CONFIG,
+            "feature_names" : feature_names,
         }, save_path)
-        print(f"\nModel saved → {save_path}")
+        print(f"Saved → {save_path}")
 
-        # Save training curves for fusion model
         if model_type == "fusion":
-            save_training_curves(tr_losses, val_losses, model_type)
+            save_training_curves(tr_l, vl_l)
 
-    # ── Save comparison table ──
-    comparison_path = os.path.join(CONFIG["results_dir"], "fusion_comparison.json")
-    with open(comparison_path, "w") as f:
+    results_path = os.path.join(CONFIG["results_dir"], "fusion_comparison.json")
+    with open(results_path, "w") as f:
         json.dump(all_results, f, indent=2)
-    print(f"\nComparison results saved → {comparison_path}")
+    print(f"\nResults saved → {results_path}")
 
-    # ── Save ROC curves ──
-    save_roc_curves(all_results, probs_dict, labels_dict)
+    save_roc_curves(probs_dict, labels_dict)
 
-    # ── Print final comparison ──
     print(f"\n{'='*60}")
-    print(f" Final Model Comparison")
+    print(f" Final Comparison")
     print(f"{'='*60}")
     print(f"{'Model':<20} {'AUC':>8} {'F1':>8} {'Accuracy':>10} {'Recall':>8}")
     print(f"{'─'*56}")
     for mt, res in all_results.items():
-        print(
-            f"{mt:<20} "
-            f"{res['auc_mean']:>8.4f} "
-            f"{res['f1_mean']:>8.4f} "
-            f"{res['accuracy_mean']:>10.4f} "
-            f"{res['recall_mean']:>8.4f}"
-        )
+        print(f"{mt:<20} {res['auc_mean']:>8.4f} {res['f1_mean']:>8.4f} "
+              f"{res['accuracy_mean']:>10.4f} {res['recall_mean']:>8.4f}")
     print(f"{'='*60}\n")
 
 
