@@ -1,0 +1,9 @@
+{
+  "feature_importance_shap": {
+    "stage_numeric": 0.015399,
+    "age": 0.0057,
+    "days_followup": 0.003503,
+    "subtype": 0.002386,
+    "gender": 0.00159
+  }
+}
