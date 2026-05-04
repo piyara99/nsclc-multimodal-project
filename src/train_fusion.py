@@ -37,7 +37,7 @@ from src.models.fusion_model import build_fusion_model
 # ─── Config ───────────────────────────────────────────────────────────────────
 
 CONFIG = {
-    "clinical_csv"       : "data/metadata/tcga_clinical_master.csv",
+    "clinical_csv"       : "data/metadata/tcga_clinical_master_deduped.csv",
     "embeddings_path"    : "data/features/image_embeddings.npy",
     "labels_path"        : "data/features/image_labels.npy",
     "model_dir"          : "outputs/models",
@@ -258,6 +258,20 @@ def train_kfold(model_type, X_img, X_clin, y, device):
             n_neg    = len(tr_idx) - n_pos
             alpha_fl = n_neg / (n_pos + n_neg) if n_pos > 0 else 0.75
             criterion = FocalLoss(alpha=alpha_fl, gamma=2.0)
+        elif model_type == "concat_fusion":
+            model = build_fusion_model(
+                model_type=model_type,
+                image_embedding_dim=CONFIG["image_embedding_dim"],
+                clinical_input_dim=CONFIG["clinical_input_dim"],
+                dropout=CONFIG["dropout"],
+            ).to(device)
+            n_total  = len(tr_idx)
+            n_pos    = int(y[tr_idx].sum())
+            n_neg    = n_total - n_pos
+            w1       = n_total / (2.0 * n_pos) if n_pos > 0 else 1.0
+            criterion = nn.BCELoss(
+                weight=torch.tensor(w1, dtype=torch.float32).to(device)
+            )
         else:
             model = build_fusion_model(
                 model_type=model_type,
@@ -350,9 +364,15 @@ def train_kfold(model_type, X_img, X_clin, y, device):
 
 def save_roc_curves(probs_dict, labels_dict):
     fig, ax = plt.subplots(figsize=(8, 6))
-    colors  = {"fusion": "#1565C0", "image_only": "#c62828", "clinical_only": "#2e7d32"}
+    colors  = {
+        "fusion": "#1565C0",
+        "concat_fusion": "#6a1b9a",
+        "image_only": "#c62828",
+        "clinical_only": "#2e7d32",
+    }
     names   = {
         "fusion":         "Weighted Fusion (image + clinical)",
+        "concat_fusion":  "Concat Fusion (image + clinical)",
         "image_only":     "Image only",
         "clinical_only":  "Clinical only",
     }
@@ -416,7 +436,7 @@ def main():
     probs_dict  = {}
     labels_dict = {}
 
-    for model_type in ["fusion", "image_only", "clinical_only"]:
+    for model_type in ["fusion", "concat_fusion", "image_only", "clinical_only"]:
         metrics, best_state, val_probs, val_labels, tr_l, vl_l = train_kfold(
             model_type, X_img, X_clin, y, device
         )

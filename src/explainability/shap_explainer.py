@@ -33,7 +33,7 @@ from src.models.resnet_encoder import build_model as build_resnet
 # ─── Configuration ────────────────────────────────────────────────────────────
 
 CONFIG = {
-    "clinical_csv"      : "data/metadata/tcga_clinical_master.csv",
+    "clinical_csv"      : "data/metadata/tcga_clinical_master_deduped.csv",
     "embeddings_path"   : "data/features/image_embeddings.npy",
     "labels_path"       : "data/features/image_labels.npy",
     "fusion_checkpoint" : "outputs/models/fusion_best.pth",

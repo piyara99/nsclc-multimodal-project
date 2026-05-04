@@ -1,0 +1,98 @@
+{
+  "phase1_classical_baselines": {
+    "LogReg (no subtype)": {
+      "AUC": 0.5213,
+      "AUC_CI_low": 0.4253,
+      "AUC_CI_high": 0.6146,
+      "AUPRC": 0.3591,
+      "F1_youden": 0.5466,
+      "CV_AUC_mean": 0.541,
+      "CV_AUC_std": 0.1302,
+      "threshold_youden": 0.4451
+    },
+    "RandomForest (no subtype)": {
+      "AUC": 0.5674,
+      "AUC_CI_low": 0.4697,
+      "AUC_CI_high": 0.6538,
+      "AUPRC": 0.3918,
+      "F1_youden": 0.5156,
+      "CV_AUC_mean": 0.5802,
+      "CV_AUC_std": 0.0903,
+      "threshold_youden": 0.385
+    },
+    "LogReg (with subtype)": {
+      "AUC": 0.5074,
+      "AUC_CI_low": 0.4131,
+      "AUC_CI_high": 0.5983,
+      "AUPRC": 0.3549,
+      "F1_youden": 0.5276,
+      "CV_AUC_mean": 0.521,
+      "CV_AUC_std": 0.1404,
+      "threshold_youden": 0.446
+    },
+    "XGBoost (no subtype)": {
+      "AUC": 0.5652,
+      "AUC_CI_low": 0.4585,
+      "AUC_CI_high": 0.6642,
+      "AUPRC": 0.4428,
+      "F1_youden": 0.5224,
+      "CV_AUC_mean": 0.5824,
+      "CV_AUC_std": 0.0963,
+      "threshold_youden": 0.2373
+    }
+  },
+  "existing_deep_models": {
+    "fusion": {
+      "loss_mean": 0.07885174928138258,
+      "loss_std": 0.0028262266423924585,
+      "accuracy_mean": 0.5942645698427382,
+      "accuracy_std": 0.05866311264125064,
+      "auc_mean": 0.6479783637592968,
+      "auc_std": 0.07856728617380276,
+      "f1_mean": 0.4007770829185916,
+      "f1_std": 0.22748526920915754,
+      "precision_mean": 0.35956959706959707,
+      "precision_std": 0.1942158299567201,
+      "recall_mean": 0.4594771241830065,
+      "recall_std": 0.2767539764249876,
+      "overall_auc": 0.6221980074719802
+    },
+    "image_only": {
+      "loss_mean": 0.9210238271460943,
+      "loss_std": 0.07320552497851888,
+      "accuracy_mean": 0.5555966697502313,
+      "accuracy_std": 0.07507688924821901,
+      "auc_mean": 0.575167906242957,
+      "auc_std": 0.11938245958809386,
+      "f1_mean": 0.4137630652220385,
+      "f1_std": 0.09660382422011199,
+      "precision_mean": 0.4373516483516483,
+      "precision_std": 0.10349035156965652,
+      "recall_mean": 0.4516339869281046,
+      "recall_std": 0.22628353383832403,
+      "overall_auc": 0.552654109589041
+    },
+    "clinical_only": {
+      "loss_mean": 0.8763759975186328,
+      "loss_std": 0.02847565872994613,
+      "accuracy_mean": 0.615263644773358,
+      "accuracy_std": 0.025107412327381843,
+      "auc_mean": 0.6208699571782736,
+      "auc_std": 0.05716662154989679,
+      "f1_mean": 0.14502164502164502,
+      "f1_std": 0.1454957682258009,
+      "precision_mean": 0.3,
+      "precision_std": 0.29154759474226505,
+      "recall_mean": 0.10065359477124183,
+      "recall_std": 0.107464178697395,
+      "overall_auc": 0.601260896637609
+    }
+  },
+  "notes": {
+    "bootstrap_samples": 1000,
+    "ci_method": "percentile (not BCa \u2014 conservative choice for small n)",
+    "split": "5-fold stratified CV, seed=42",
+    "subtype_in_baselines": "excluded to avoid image encoder leakage",
+    "duplicate_fix": "applied before all training"
+  }
+}

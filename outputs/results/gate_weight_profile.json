@@ -1,0 +1,9 @@
+{
+  "img_weight_mean": 0.6859,
+  "img_weight_std": 0.2293,
+  "clin_weight_mean": 0.3141,
+  "clin_weight_std": 0.2293,
+  "recurrence_rate_high_image_group": 0.4,
+  "recurrence_rate_high_clinical_group": 0.3,
+  "overall_recurrence_rate": 0.3613
+}

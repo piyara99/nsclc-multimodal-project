@@ -1,0 +1,28 @@
+{
+  "inference_ms_mean": 3.407,
+  "inference_ms_std": 1.829,
+  "peak_gpu_mb": 9.6,
+  "model_parameters": {
+    "LateFusionModel": {
+      "parameters": 48065,
+      "size_kb": 187.8
+    },
+    "ImageOnlyModel": {
+      "parameters": 16641,
+      "size_kb": 65.0
+    },
+    "ClinicalOnlyModel": {
+      "parameters": 2561,
+      "size_kb": 10.0
+    },
+    "GatedFusionModel (GMU)": {
+      "parameters": 63107,
+      "size_kb": 246.5
+    },
+    "ResNet-50 (full)": {
+      "parameters": 25557032,
+      "size_kb": 97.5,
+      "note": "Only encoder (without fc layer) used for embeddings"
+    }
+  }
+}
