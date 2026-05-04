@@ -10,6 +10,7 @@ Features used:
     - subtype         (binary encoded: LUAD=0, LUSC=1)
     - stage_numeric   (ordinal: IA=1 ... IV=4, derived from stage string)
     - days_followup   (continuous, normalised)
+    - prior_treatment (binary encoded: no=0, yes=1)
 
 Target:
     - recurrence_label (binary: 0=no recurrence, 1=recurrence)
@@ -43,6 +44,7 @@ class ClinicalProcessor:
         "subtype",
         "stage_numeric",
         "days_followup",
+        "prior_treatment",
     ]
 
     STAGE_MAP = {
@@ -85,23 +87,28 @@ class ClinicalProcessor:
         if before != after:
             print(f"  Dropped {before - after} rows with missing recurrence_label")
 
-        # Gender encoding: male=0, female=1
-        df["gender"] = df["gender"].str.lower().map(
-            {"male": 0, "female": 1}
-        ).fillna(0).astype(int)
+        # Gender encoding: prefer numeric values from new CSV
+        df["gender"] = pd.to_numeric(df["gender"], errors="coerce")
+        if df["gender"].isna().all():
+            df["gender"] = df["gender"].map(lambda x: {"male": 0, "female": 1}.get(str(x).lower(), np.nan))
+        df["gender"] = pd.to_numeric(df["gender"], errors="coerce").fillna(0)
 
-        # Subtype encoding: LUAD=0, LUSC=1
-        df["subtype"] = df["subtype"].str.upper().map(
-            {"LUAD": 0, "LUSC": 1}
-        ).fillna(0).astype(int)
+        # Subtype encoding: prefer numeric values from new CSV
+        df["subtype"] = pd.to_numeric(df["subtype"], errors="coerce")
+        if df["subtype"].isna().all():
+            df["subtype"] = df["subtype"].map(lambda x: {"LUAD": 0, "LUSC": 1}.get(str(x).upper(), np.nan))
+        df["subtype"] = pd.to_numeric(df["subtype"], errors="coerce").fillna(0)
 
-        # Stage: convert string → ordinal integer
-        df["stage_numeric"] = (
-            df["stage"]
-            .str.lower()
-            .str.strip()
-            .map(self.STAGE_MAP)
-        )
+        # Stage: prefer numeric stage_numeric from new CSV; fallback to stage string mapping
+        if "stage_numeric" in df.columns:
+            df["stage_numeric"] = pd.to_numeric(df["stage_numeric"], errors="coerce")
+        elif "stage" in df.columns:
+            df["stage_numeric"] = df["stage"].map(
+                lambda x: self.STAGE_MAP.get(str(x).strip().lower(), np.nan)
+            )
+            df["stage_numeric"] = pd.to_numeric(df["stage_numeric"], errors="coerce")
+        else:
+            df["stage_numeric"] = 0
         # Fill unknown stages with median
         stage_median = df["stage_numeric"].median()
         df["stage_numeric"] = df["stage_numeric"].fillna(stage_median)
@@ -113,6 +120,13 @@ class ClinicalProcessor:
         df["days_followup"] = df["days_followup"].fillna(
             df["days_followup"].median()
         )
+
+        # Prior treatment: ensure binary numeric and fill missing with 0
+        if "prior_treatment" not in df.columns:
+            df["prior_treatment"] = 0
+        df["prior_treatment"] = pd.to_numeric(
+            df["prior_treatment"], errors="coerce"
+        ).fillna(0).astype(int)
 
         # Ensure label is integer
         df["recurrence_label"] = df["recurrence_label"].astype(int)

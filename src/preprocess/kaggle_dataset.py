@@ -36,6 +36,7 @@ class KaggleNSCLCDataset(Dataset):
         val_ratio: float = 0.15,
         seed: int = 42,
         transform=None,
+        class_names=None,
     ):
         assert split in ("train", "val", "test"), \
             f"split must be 'train', 'val', or 'test', got '{split}'"
@@ -43,14 +44,15 @@ class KaggleNSCLCDataset(Dataset):
         self.root_dir = root_dir
         self.split = split
         self.transform = transform if transform else self._default_transform(split)
+        self.class_names = list(class_names) if class_names is not None else self.CLASS_NAMES
 
         self.samples = []   # list of (image_path, label)
-        self.labels = []    # list of int labels (0 = LUAD, 1 = LUSC)
+        self.labels = []    # list of int labels
 
         import random
         random.seed(seed)
 
-        for label_idx, class_name in enumerate(self.CLASS_NAMES):
+        for label_idx, class_name in enumerate(self.class_names):
             class_dir = os.path.join(root_dir, class_name)
             if not os.path.isdir(class_dir):
                 raise FileNotFoundError(
@@ -80,9 +82,12 @@ class KaggleNSCLCDataset(Dataset):
                 )
                 self.labels.append(label_idx)
 
+        class_counts = ", ".join(
+            f"{name}={self.labels.count(i)}" for i, name in enumerate(self.class_names)
+        )
         print(
             f"[KaggleNSCLCDataset] {split}: {len(self.samples)} samples "
-            f"(LUAD={self.labels.count(0)}, LUSC={self.labels.count(1)})"
+            f"({class_counts})"
         )
 
     def __len__(self):
@@ -134,7 +139,8 @@ def get_class_weights(dataset):
 
     counts = Counter(dataset.labels)
     total = len(dataset.labels)
-    weights = [total / counts[i] for i in range(len(KaggleNSCLCDataset.CLASS_NAMES))]
+    num_classes = len(getattr(dataset, "class_names", KaggleNSCLCDataset.CLASS_NAMES))
+    weights = [total / counts[i] for i in range(num_classes)]
     return torch.tensor(weights, dtype=torch.float)
 
 
@@ -144,5 +150,5 @@ if __name__ == "__main__":
     dataset = KaggleNSCLCDataset(root_dir="data/raw", split="train")
     img, label = dataset[0]
     print(f"Sample image shape : {img.shape}")
-    print(f"Sample label       : {label} ({KaggleNSCLCDataset.CLASS_NAMES[label]})")
+    print(f"Sample label       : {label} ({dataset.class_names[label]})")
     print(f"Class weights      : {get_class_weights(dataset)}")

@@ -28,7 +28,7 @@ import matplotlib.pyplot as plt
 # Allow imports from src/
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.preprocess.kaggle_dataset import KaggleNSCLCDataset, get_class_weights
+from src.preprocess.kaggle_dataset import KaggleNSCLCDataset
 from src.models.resnet_encoder import build_model
 
 
@@ -40,13 +40,13 @@ CONFIG = {
     "figures_dir"   : "outputs/figures",
     "results_dir"   : "outputs/results",
 
-    "num_classes"   : 2,
+    "num_classes"   : 3,
     "embedding_dim" : 256,
     "dropout"       : 0.4,
 
     "epochs"        : 15,
     "batch_size"    : 32,
-    "num_workers"   : 4,
+    "num_workers"   : 0,
     "learning_rate" : 1e-4,
     "weight_decay"  : 1e-4,
 
@@ -142,7 +142,7 @@ def evaluate(model, loader, criterion, device):
         loss = criterion(logits, labels)
 
         total_loss += loss.item() * images.size(0)
-        probs = torch.softmax(logits, dim=1)[:, 1]
+        probs = torch.softmax(logits, dim=1)
         preds = logits.argmax(dim=1)
         correct += (preds == labels).sum().item()
         total += images.size(0)
@@ -152,10 +152,9 @@ def evaluate(model, loader, criterion, device):
 
     avg_loss = total_loss / total
     accuracy = 100.0 * correct / total
-    auc = roc_auc_score(all_labels, all_probs)
-    f1 = f1_score(all_labels,
-                  [1 if p > 0.5 else 0 for p in all_probs],
-                  average="weighted")
+    auc = roc_auc_score(all_labels, all_probs, multi_class="ovr", average="weighted")
+    preds = np.argmax(np.array(all_probs), axis=1)
+    f1 = f1_score(all_labels, preds, average="weighted")
 
     return avg_loss, accuracy, auc, f1, all_labels, all_probs
 
@@ -165,6 +164,8 @@ def evaluate(model, loader, criterion, device):
 def main():
     make_dirs()
     device = torch.device(CONFIG["device"])
+    classes = ['LUAD', 'LUSC', 'OTHER']
+
     print(f"\n{'='*60}")
     print(f" NSCLC ResNet-50 Subtype Classifier Training")
     print(f"{'='*60}")
@@ -178,13 +179,13 @@ def main():
 
     # ── Datasets & loaders ──
     train_dataset = KaggleNSCLCDataset(
-        root_dir=CONFIG["data_dir"], split="train", seed=CONFIG["seed"]
+        root_dir=CONFIG["data_dir"], split="train", seed=CONFIG["seed"], class_names=classes
     )
     val_dataset = KaggleNSCLCDataset(
-        root_dir=CONFIG["data_dir"], split="val", seed=CONFIG["seed"]
+        root_dir=CONFIG["data_dir"], split="val", seed=CONFIG["seed"], class_names=classes
     )
     test_dataset = KaggleNSCLCDataset(
-        root_dir=CONFIG["data_dir"], split="test", seed=CONFIG["seed"]
+        root_dir=CONFIG["data_dir"], split="test", seed=CONFIG["seed"], class_names=classes
     )
 
     train_loader = DataLoader(
@@ -221,9 +222,10 @@ def main():
     model.freeze_backbone()
     print("Backbone frozen for first", CONFIG["freeze_epochs"], "epochs.\n")
 
-    # ── Loss with class weights ──
-    class_weights = get_class_weights(train_dataset).to(device)
-    criterion = nn.CrossEntropyLoss(weight=class_weights)
+    # ── Loss with fixed class weights ──
+    criterion = nn.CrossEntropyLoss(
+        weight=torch.tensor([1.0, 1.0, 0.4], dtype=torch.float32).to(device)
+    )
 
     # ── Optimiser ──
     optimizer = optim.AdamW(
@@ -310,12 +312,12 @@ def main():
     test_loss, test_acc, test_auc, test_f1, test_labels, test_probs = evaluate(
         model, test_loader, criterion, device
     )
-    test_preds = [1 if p > 0.5 else 0 for p in test_probs]
+    test_preds = np.argmax(np.array(test_probs), axis=1)
 
     print(f" Test Accuracy : {test_acc:.2f}%")
     print(f" Test AUC      : {test_auc:.4f}")
     print(f" Test F1       : {test_f1:.4f}")
-    print(f"\n{classification_report(test_labels, test_preds, target_names=['LUAD','LUSC'])}")
+    print(f"\n{classification_report(test_labels, test_preds, target_names=classes)}")
 
     # Save results
     results = {

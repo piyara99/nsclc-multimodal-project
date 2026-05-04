@@ -216,9 +216,9 @@ def run_classical_baselines(df: pd.DataFrame) -> dict:
 
     # Build feature matrix matching clinical_processor.py exactly
     df = df.copy()
-    df['gender_enc'] = df['gender'].str.lower().map({'male': 0, 'female': 1}).fillna(0)
-    df['subtype_enc'] = df['subtype'].str.upper().map({'LUAD': 0, 'LUSC': 1}).fillna(0)
-    df['stage_numeric'] = df['stage'].str.lower().str.strip().map(STAGE_MAP)
+    df['gender_enc'] = pd.to_numeric(df['gender'], errors='coerce').fillna(0).astype(int)
+    df['subtype_enc'] = pd.to_numeric(df['subtype'], errors='coerce').fillna(0).astype(int)
+    df['stage_numeric'] = pd.to_numeric(df['stage_numeric'], errors='coerce').fillna(0).astype(int)
     stage_median = df['stage_numeric'].median()
     df['stage_numeric'] = df['stage_numeric'].fillna(stage_median)
     df['age'] = df['age'].fillna(df['age'].median())

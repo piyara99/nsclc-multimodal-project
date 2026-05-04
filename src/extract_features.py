@@ -120,7 +120,7 @@ def main():
 
     # ── Load trained model ──
     model = build_model(
-        num_classes=2,
+        num_classes=3,
         pretrained=False,       # weights come from checkpoint
         embedding_dim=CONFIG["embedding_dim"],
         mode="encoder",         # returns embeddings, not logits

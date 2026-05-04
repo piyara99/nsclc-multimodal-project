@@ -28,7 +28,7 @@ CONFIG = {
     "figures_dir"        : "outputs/figures",
     "model_dir"          : "outputs/models",
     "seed"               : 42,
-    "clinical_input_dim" : 5,
+    "clinical_input_dim" : 6,
     "image_embedding_dim": 256,
     "dropout"            : 0.4,
 }
@@ -211,10 +211,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 def test_gmu_output_shape():
     """GMU forward pass returns correct shapes for batch of 8."""
     from src.phase2_gmu import GatedFusionModel
-    model = GatedFusionModel(image_embedding_dim=256, clinical_input_dim=5)
+    model = GatedFusionModel(image_embedding_dim=256, clinical_input_dim=6)
     model.eval()
     img  = torch.randn(8, 256)
-    clin = torch.randn(8, 5)
+    clin = torch.randn(8, 6)
     with torch.no_grad():
         out = model(img, clin)
     assert out.shape == (8,), f"Expected (8,), got {out.shape}"
@@ -223,10 +223,10 @@ def test_gmu_output_shape():
 def test_gmu_softmax_invariant():
     """Gate weights must sum to 1.0 for every patient (Softmax invariant)."""
     from src.phase2_gmu import GatedFusionModel
-    model = GatedFusionModel(image_embedding_dim=256, clinical_input_dim=5)
+    model = GatedFusionModel(image_embedding_dim=256, clinical_input_dim=6)
     model.eval()
     img  = torch.randn(16, 256)
-    clin = torch.randn(16, 5)
+    clin = torch.randn(16, 6)
     with torch.no_grad():
         _, g = model(img, clin, return_weights=True)
     sums = g.sum(dim=1)
@@ -237,10 +237,10 @@ def test_gmu_softmax_invariant():
 def test_gmu_probs_in_range():
     """Output probabilities must be in [0, 1]."""
     from src.phase2_gmu import GatedFusionModel
-    model = GatedFusionModel(image_embedding_dim=256, clinical_input_dim=5)
+    model = GatedFusionModel(image_embedding_dim=256, clinical_input_dim=6)
     model.eval()
     img  = torch.randn(32, 256)
-    clin = torch.randn(32, 5)
+    clin = torch.randn(32, 6)
     with torch.no_grad():
         probs = model(img, clin)
     assert probs.min() >= 0.0, f"Probability below 0: {probs.min()}"
@@ -250,14 +250,14 @@ def test_gmu_probs_in_range():
 def test_gmu_different_patients_different_weights():
     """Per-patient gating: different inputs should produce different weights."""
     from src.phase2_gmu import GatedFusionModel
-    model = GatedFusionModel(image_embedding_dim=256, clinical_input_dim=5)
+    model = GatedFusionModel(image_embedding_dim=256, clinical_input_dim=6)
     model.eval()
     torch.manual_seed(42)
     # Two very different patients
     img1  = torch.zeros(1, 256)
-    clin1 = torch.zeros(1, 5)
+    clin1 = torch.zeros(1, 6)
     img2  = torch.ones(1, 256)
-    clin2 = torch.ones(1, 5) * 5
+    clin2 = torch.ones(1, 6) * 5
     with torch.no_grad():
         _, g1 = model(img1, clin1, return_weights=True)
         _, g2 = model(img2, clin2, return_weights=True)
@@ -280,15 +280,15 @@ def test_clinical_no_nan():
 
 
 def test_clinical_feature_count():
-    """Clinical processor must produce exactly 5 features per patient."""
+    """Clinical processor must produce exactly 6 features per patient."""
     csv_path = "data/metadata/tcga_clinical_master.csv"
     if not os.path.exists(csv_path):
         pytest.skip(f"{csv_path} not found — skipping")
     from src.preprocess.clinical_processor import ClinicalProcessor
     proc = ClinicalProcessor(csv_path)
     X, y, names = proc.get_features_and_labels(fit_scaler=True)
-    assert X.shape[1] == 5, f"Expected 5 features, got {X.shape[1]}"
-    assert len(names) == 5, f"Expected 5 feature names, got {len(names)}"
+    assert X.shape[1] == 6, f"Expected 6 features, got {X.shape[1]}"
+    assert len(names) == 6, f"Expected 6 feature names, got {len(names)}"
 
 
 # ── FR-11: Image encoder ──────────────────────────────────────────────────────
@@ -418,8 +418,6 @@ def main():
     print(f"\n Next steps:")
     print(f"   1. Run: pytest tests/test_pipeline.py -v")
     print(f"   2. Add GatedFusionModel to src/models/fusion_model.py")
-    print(f"   3. Start writing Results chapter")
-    print(f"{'='*60}\n")
 
 
 if __name__ == "__main__":

@@ -44,7 +44,7 @@ CONFIG = {
     "figures_dir"        : "outputs/figures",
     "results_dir"        : "outputs/results",
 
-    "clinical_input_dim" : 5,
+    "clinical_input_dim" : 6,
     "image_embedding_dim": 256,
     "dropout"            : 0.4,
 
@@ -77,7 +77,7 @@ class WeightedFusionModel(nn.Module):
     def __init__(
         self,
         image_embedding_dim: int = 256,
-        clinical_input_dim: int = 5,
+        clinical_input_dim: int = 6,
         hidden_dim: int = 128,
         dropout: float = 0.4,
     ):

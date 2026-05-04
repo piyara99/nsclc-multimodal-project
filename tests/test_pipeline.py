@@ -27,10 +27,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 def test_gmu_output_shape():
     """GMU forward pass returns correct shapes for batch of 8."""
     from src.phase2_gmu import GatedFusionModel
-    model = GatedFusionModel(image_embedding_dim=256, clinical_input_dim=5)
+    model = GatedFusionModel(image_embedding_dim=256, clinical_input_dim=6)
     model.eval()
     img  = torch.randn(8, 256)
-    clin = torch.randn(8, 5)
+    clin = torch.randn(8, 6)
     with torch.no_grad():
         out = model(img, clin)
     assert out.shape == (8,), f"Expected (8,), got {out.shape}"
@@ -39,10 +39,10 @@ def test_gmu_output_shape():
 def test_gmu_softmax_invariant():
     """Gate weights must sum to 1.0 for every patient (Softmax invariant)."""
     from src.phase2_gmu import GatedFusionModel
-    model = GatedFusionModel(image_embedding_dim=256, clinical_input_dim=5)
+    model = GatedFusionModel(image_embedding_dim=256, clinical_input_dim=6)
     model.eval()
     img  = torch.randn(16, 256)
-    clin = torch.randn(16, 5)
+    clin = torch.randn(16, 6)
     with torch.no_grad():
         _, g = model(img, clin, return_weights=True)
     sums = g.sum(dim=1)
@@ -53,10 +53,10 @@ def test_gmu_softmax_invariant():
 def test_gmu_probs_in_range():
     """Output probabilities must be in [0, 1]."""
     from src.phase2_gmu import GatedFusionModel
-    model = GatedFusionModel(image_embedding_dim=256, clinical_input_dim=5)
+    model = GatedFusionModel(image_embedding_dim=256, clinical_input_dim=6)
     model.eval()
     img  = torch.randn(32, 256)
-    clin = torch.randn(32, 5)
+    clin = torch.randn(32, 6)
     with torch.no_grad():
         probs = model(img, clin)
     assert probs.min() >= 0.0, f"Probability below 0: {probs.min()}"
@@ -66,14 +66,14 @@ def test_gmu_probs_in_range():
 def test_gmu_different_patients_different_weights():
     """Per-patient gating: different inputs should produce different weights."""
     from src.phase2_gmu import GatedFusionModel
-    model = GatedFusionModel(image_embedding_dim=256, clinical_input_dim=5)
+    model = GatedFusionModel(image_embedding_dim=256, clinical_input_dim=6)
     model.eval()
     torch.manual_seed(42)
     # Two very different patients
     img1  = torch.zeros(1, 256)
-    clin1 = torch.zeros(1, 5)
+    clin1 = torch.zeros(1, 6)
     img2  = torch.ones(1, 256)
-    clin2 = torch.ones(1, 5) * 5
+    clin2 = torch.ones(1, 6) * 5
     with torch.no_grad():
         _, g1 = model(img1, clin1, return_weights=True)
         _, g2 = model(img2, clin2, return_weights=True)
@@ -96,15 +96,15 @@ def test_clinical_no_nan():
 
 
 def test_clinical_feature_count():
-    """Clinical processor must produce exactly 5 features per patient."""
+    """Clinical processor must produce exactly 6 features per patient."""
     csv_path = "data/metadata/tcga_clinical_master.csv"
     if not os.path.exists(csv_path):
         pytest.skip(f"{csv_path} not found — skipping")
     from src.preprocess.clinical_processor import ClinicalProcessor
     proc = ClinicalProcessor(csv_path)
     X, y, names = proc.get_features_and_labels(fit_scaler=True)
-    assert X.shape[1] == 5, f"Expected 5 features, got {X.shape[1]}"
-    assert len(names) == 5, f"Expected 5 feature names, got {len(names)}"
+    assert X.shape[1] == 6, f"Expected 6 features, got {X.shape[1]}"
+    assert len(names) == 6, f"Expected 6 feature names, got {len(names)}"
 
 
 # ── FR-11: Image encoder ──────────────────────────────────────────────────────
@@ -148,25 +148,20 @@ def test_bootstrap_single_class_guard():
 def test_dedup_fix():
     """Deduplication must reduce row count when duplicates exist."""
     from src.phase1_stats import fix_duplicate_patients
-    import tempfile, os
+    import pandas as pd, io
     csv_with_dups = """case_uuid,patient_id,project_id,subtype,gender,age,stage,days_followup,recurrence,days_to_recurrence,recurrence_label
 A,TCGA-01,TCGA-LUAD,LUAD,male,60.0,Stage IB,500.0,,,0
 B,TCGA-01,TCGA-LUAD,LUAD,male,60.0,Stage IB,500.0,,,0
 C,TCGA-02,TCGA-LUAD,LUAD,female,55.0,Stage IIA,700.0,Yes,,1
 """
-    with tempfile.NamedTemporaryFile(mode="w", suffix=".csv",
-                                     delete=False, encoding="utf-8") as f:
+    # Write temp file
+    import tempfile, os
+    tmp = os.path.join(tempfile.gettempdir(), "test_dedup.csv")
+    with open(tmp, "w") as f:
         f.write(csv_with_dups)
-        tmp = f.name
-    try:
-        df = fix_duplicate_patients(tmp)
-        assert len(df) == 2, f"Expected 2 unique patients, got {len(df)}"
-        assert df['patient_id'].nunique() == 2
-    finally:
-        os.unlink(tmp)
-        deduped = tmp.replace('.csv', '_deduped.csv')
-        if os.path.exists(deduped):
-            os.unlink(deduped)
+    df = fix_duplicate_patients(tmp)
+    assert len(df) == 2, f"Expected 2 unique patients, got {len(df)}"
+    assert df['patient_id'].nunique() == 2
 
 
 # ── FR-16: Focal loss ────────────────────────────────────────────────────────

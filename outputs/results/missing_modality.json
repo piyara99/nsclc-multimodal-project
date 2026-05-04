@@ -1,20 +1,20 @@
 {
   "Full (both modalities)": {
-    "AUC": 0.9545,
-    "AUC_CI_low": 0.8692,
-    "AUC_CI_high": 1.0,
-    "F1": 0.9091
+    "AUC": 0.8712,
+    "AUC_CI_low": 0.7083,
+    "AUC_CI_high": 0.9882,
+    "F1": 0.6897
   },
   "Image missing (clinical)": {
-    "AUC": 0.7409,
-    "AUC_CI_low": 0.5536,
-    "AUC_CI_high": 0.8941,
-    "F1": 0.6
+    "AUC": 0.6591,
+    "AUC_CI_low": 0.4663,
+    "AUC_CI_high": 0.8267,
+    "F1": 0.2353
   },
   "Clinical missing (image)": {
-    "AUC": 0.9568,
-    "AUC_CI_low": 0.8718,
-    "AUC_CI_high": 1.0,
-    "F1": 0.9091
+    "AUC": 0.8712,
+    "AUC_CI_low": 0.7083,
+    "AUC_CI_high": 0.9886,
+    "F1": 0.6897
   }
 }

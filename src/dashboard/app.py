@@ -189,7 +189,7 @@ def load_models():
     # NOT LateFusionModel which has image_projector, clinical_encoder, fusion_head
     fusion = WeightedFusionModel(
         image_embedding_dim=256,
-        clinical_input_dim=5,
+        clinical_input_dim=6,
     ).to(device)
     f_ckpt = torch.load("outputs/models/fusion_best.pth", map_location=device)
     fusion.load_state_dict(f_ckpt["model_state"])

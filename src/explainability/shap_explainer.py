@@ -39,7 +39,7 @@ CONFIG = {
     "fusion_checkpoint" : "outputs/models/fusion_best.pth",
     "figures_dir"       : "outputs/figures",
     "results_dir"       : "outputs/results",
-    "clinical_input_dim": 5,
+    "clinical_input_dim": 6,
     "image_embedding_dim": 256,
     "n_background"      : 20,    # number of background samples for KernelExplainer
     "n_explain"         : 30,    # number of patients to explain
