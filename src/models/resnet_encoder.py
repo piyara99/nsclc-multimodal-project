@@ -17,7 +17,6 @@ class ResNetEncoder(nn.Module):
 
     Args:
         num_classes (int): Number of output classes for classification head.
-            Set to 2 for LUAD vs LUSC subtype classification.
         pretrained (bool): Use ImageNet pretrained weights.
         embedding_dim (int): Dimension of the feature embedding layer.
         mode (str): 'classifier' returns class logits;
@@ -27,7 +26,7 @@ class ResNetEncoder(nn.Module):
 
     def __init__(
         self,
-        num_classes: int = 2,
+        num_classes: int = 3,
         pretrained: bool = True,
         embedding_dim: int = 256,
         mode: str = "classifier",
@@ -104,7 +103,7 @@ class ResNetEncoder(nn.Module):
 
 
 def build_model(
-    num_classes: int = 2,
+    num_classes: int = 3,
     pretrained: bool = True,
     embedding_dim: int = 256,
     mode: str = "classifier",
@@ -129,14 +128,14 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Device: {device}")
 
-    model = build_model(num_classes=2, pretrained=True).to(device)
+    model = build_model(num_classes=3, pretrained=True).to(device)
 
     dummy_input = torch.randn(4, 3, 224, 224).to(device)
 
     # Test classifier mode
     model.set_mode("classifier")
     logits = model(dummy_input)
-    print(f"Classifier output shape : {logits.shape}")   # (4, 2)
+    print(f"Classifier output shape : {logits.shape}")   # (4, 3)
 
     # Test encoder mode
     model.set_mode("encoder")

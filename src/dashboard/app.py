@@ -178,7 +178,7 @@ def load_models():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # ── ResNet encoder ──────────────────────────────────────────────────────
-    resnet = build_resnet(num_classes=2, pretrained=False, embedding_dim=256).to(device)
+    resnet = build_resnet(num_classes=3, pretrained=False, embedding_dim=256).to(device)
     ckpt   = torch.load("outputs/models/resnet_best.pth", map_location=device)
     resnet.load_state_dict(ckpt["model_state"])
     resnet.eval()
@@ -441,7 +441,7 @@ elif page == "Predict Recurrence":
 
     # ── Research disclaimer ──────────────────────────────────────────────────
     st.info(
-        "**Research tool only.** This system is a proof-of-concept trained on n=155 "
+        "**Research tool only.** This system is a proof-of-concept trained on n=169 "
         "deduplicated TCGA patients. Predictions are not validated for clinical use. "
         "Image features are proxy-matched by subtype; patient-specific slide linkage "
         "is a documented future work item.",
@@ -468,6 +468,7 @@ elif page == "Predict Recurrence":
             subtype = st.selectbox("NSCLC Subtype", ["LUAD", "LUSC"])
             stage   = st.selectbox("Tumour Stage", list(STAGE_OPTIONS.keys()))
             days_fu = st.slider("Days of Follow-up", 0, 3000, 365)
+            prior_treatment = st.selectbox("Prior Treatment", ["No", "Yes"])
             submitted = st.form_submit_button("Run Prediction", use_container_width=True)
 
     with col_result:
@@ -488,7 +489,7 @@ elif page == "Predict Recurrence":
                         probs  = torch.softmax(logits, dim=1)
                         conf, pred_idx = probs.max(dim=1)
                         conf = conf.item()
-                        pred_subtype_label = ["LUAD", "LUSC"][pred_idx.item()]
+                        pred_subtype_label = ["LUAD", "LUSC", "OTHER"][pred_idx.item()]
 
                     CONFIDENCE_THRESHOLD = 0.70
 
@@ -517,6 +518,7 @@ elif page == "Predict Recurrence":
                         0.0 if subtype == "LUAD" else 1.0,
                         float(STAGE_OPTIONS[stage]),
                         float(days_fu),
+                        1.0 if prior_treatment == "Yes" else 0.0,
                     ]], dtype=np.float32)
                     clin_scaled = processor.scaler.transform(raw).astype(np.float32)
 
@@ -603,7 +605,7 @@ elif page == "Model Results":
     st.markdown('<div class="section-header">Model Performance Results</div>',
                 unsafe_allow_html=True)
     st.markdown(
-        '<div class="section-sub">5-fold stratified cross-validation on deduplicated cohort (n=155 unique patients, seed=42)</div>',
+        '<div class="section-sub">5-fold stratified cross-validation on deduplicated cohort (n=169 unique patients, seed=42)</div>',
         unsafe_allow_html=True,
     )
 
@@ -768,7 +770,7 @@ elif page == "About":
           records after deduplication (originally 234 rows — data leakage bug
           found and corrected)
 
-        ### Key Results (n=155, 5-fold stratified CV, seed=42)
+        ### Key Results (n=169, 5-fold stratified CV, seed=42)
         - Clinical-only MLP: AUC 0.6199 ± 0.0561 (best unimodal)
         - GMU gated fusion: AUC 0.6157 (95% CI: 0.483–0.669)
         - Weighted fusion: AUC 0.5578 ± 0.0692
@@ -805,6 +807,6 @@ elif page == "About":
 
         ### Research Questions
         1. Does multimodal fusion improve AUC over unimodal baselines under a 6GB GPU constraint?
-        2. Does GMU gated fusion improve over scalar-weighted late fusion on n=155?
+        2. Does GMU gated fusion improve over scalar-weighted late fusion on n=169?
         3. Which features are most predictive of NSCLC recurrence?
         """)

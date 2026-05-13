@@ -249,7 +249,7 @@ if __name__ == "__main__":
     print(f"Device: {device}")
 
     # Load trained model
-    model = build_model(num_classes=2, pretrained=False, embedding_dim=256).to(device)
+    model = build_model(num_classes=3, pretrained=False, embedding_dim=256).to(device)
     checkpoint = torch.load("outputs/models/resnet_best.pth", map_location=device)
     model.load_state_dict(checkpoint["model_state"])
     model.set_mode("classifier")

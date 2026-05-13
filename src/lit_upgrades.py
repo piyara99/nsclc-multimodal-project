@@ -520,7 +520,7 @@ def per_patient_gate_profile():
     else:
         print(f"  → No clear recurrence-rate difference by gate weight group.")
         print(f"  → Consistent with gate weight instability finding — model not")
-        print(f"    learning stable clinically coherent weighting at n=155.")
+        print(f"    learning stable clinically coherent weighting at n=169.")
         print(f"  → Write honestly: 'Per-patient gate weight analysis revealed no")
         print(f"    statistically significant association between modality weight")
         print(f"    and recurrence rate, consistent with the gate weight instability")
