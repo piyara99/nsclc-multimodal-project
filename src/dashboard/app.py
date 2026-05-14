@@ -508,6 +508,14 @@ elif page == "Predict Recurrence":
                             "meaningless embeddings and unreliable predictions."
                         )
                         st.stop()
+
+                    if pred_idx.item() == 2:
+                        st.warning(
+                            f"⚠️ **Non-NSCLC tissue detected ({conf*100:.1f}% OTHER confidence).** "
+                            f"The uploaded image was classified as non-NSCLC tissue. "
+                            f"Prediction has been blocked. Please upload a LUAD or LUSC histopathology patch."
+                        )
+                        st.stop()
                     # ── End input validation ───────────────────────────────────────────
 
                     img_emb = get_image_embedding(resnet, img_tensor, device)
