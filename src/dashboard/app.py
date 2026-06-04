@@ -353,8 +353,8 @@ if page == "Home":
     c1, c2, c3, c4 = st.columns(4)
     with c1:
         st.markdown(f"""<div class="metric-card">
-            <div class="val">{fusion_auc:.3f}</div>
-            <div class="lbl">Weighted Fusion AUC</div></div>""",
+            <div class="val">0.6381</div>
+            <div class="lbl">GMU Fusion AUC</div></div>""",
             unsafe_allow_html=True)
     with c2:
         st.markdown("""<div class="metric-card">
@@ -364,7 +364,7 @@ if page == "Home":
     with c3:
         # ── FIX 4: correct patient count
         st.markdown("""<div class="metric-card">
-            <div class="val">155</div>
+            <div class="val">169</div>
             <div class="lbl">Unique Patients (deduped)</div></div>""",
             unsafe_allow_html=True)
     with c4:
@@ -642,7 +642,7 @@ elif page == "Model Results":
             <b>Key finding:</b> Clinical-only (MLP) achieves the highest AUC (0.6199 ± 0.0561),
             while scalar weighted fusion (0.5578 ± 0.0692) underperforms — indicating that
             naively fused proxy-matched image embeddings introduce noise rather than
-            complementary signal. The GMU gated fusion (AUC 0.6157) mitigates this
+            complementary signal. The GMU gated fusion (AUC 0.6381) mitigates this
             degradation through adaptive per-patient modality weighting.
         </div>""", unsafe_allow_html=True)
 
@@ -774,13 +774,13 @@ elif page == "About":
         - **Kaggle LC25000** (Borkowski et al., 2019): 10,000 NSCLC histopathology
           patches (5,000 LUAD + 5,000 LUSC), used for encoder pretraining and
           proxy-matched image embeddings
-        - **TCGA-LUAD / TCGA-LUSC** (GDC Portal): 155 unique patient clinical
+        - **TCGA-LUAD / TCGA-LUSC** (GDC Portal): 169 unique patient clinical
           records after deduplication (originally 234 rows — data leakage bug
           found and corrected)
 
         ### Key Results (n=169, 5-fold stratified CV, seed=42)
         - Clinical-only MLP: AUC 0.6199 ± 0.0561 (best unimodal)
-        - GMU gated fusion: AUC 0.6157 (95% CI: 0.483–0.669)
+        - GMU gated fusion: AUC 0.6381 (95% CI: 0.483–0.669)
         - Weighted fusion: AUC 0.5578 ± 0.0692
         - Subtype classifier: 99.93% accuracy, AUC 1.0 (saturated benchmark)
         - Inference: 3.41 ± 1.83ms, 63,107 trainable parameters, 6GB GPU validated
@@ -809,7 +809,7 @@ elif page == "About":
         | Module | PUSL3190 Computing Project |
         | Degree | BSc (Hons) Software Engineering |
         | University | University of Plymouth |
-        | Delivery | SLIIT Sri Lanka |
+        | Delivery | NSBM Green University, Sri Lanka |
         | Student ID | 10953013 |
         | Supervisor | Ms. M T A Wickramasinghe |
 

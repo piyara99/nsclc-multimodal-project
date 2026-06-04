@@ -1,0 +1,14 @@
+{
+  "total_patients": 1025,
+  "recurrence_1": 308,
+  "recurrence_0": 717,
+  "label_tiers": {
+    "NEG": 717,
+    "BRONZE": 206,
+    "GOLD": 76,
+    "SILVER": 26
+  },
+  "with_timing": 1008,
+  "imaging_confirmed": 76,
+  "hq_patients": 819
+}
