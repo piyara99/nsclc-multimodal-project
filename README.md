@@ -1,4 +1,4 @@
-# 🫁 AI-Based Prediction of NSCLC Recurrence Using Multimodal Deep Learning
+# AI-Based Prediction of NSCLC Recurrence Using Multimodal Deep Learning
 
 > **Final Year Research Project | BSc (Hons) Software Engineering | NSBM Green University (University of Plymouth, UK)**
 
@@ -11,32 +11,32 @@
 
 ---
 
-# 📖 Overview
+# Overview
 
 Lung cancer remains the leading cause of cancer-related mortality worldwide, with **Non-Small Cell Lung Cancer (NSCLC)** accounting for approximately **85% of all lung cancer cases**. Predicting recurrence after treatment is critical for improving patient stratification, treatment planning, and long-term outcomes.
 
 This project presents a **resource-efficient multimodal deep learning framework** that combines:
 
-- 🩺 Structured clinical data from **TCGA**
-- 🔬 Histopathology image embeddings extracted from **LC25000 tissue patches**
+-  Structured clinical data from **TCGA**
+-  Histopathology image embeddings extracted from **LC25000 tissue patches**
 
 to predict NSCLC recurrence using **adaptive multimodal fusion**. Unlike traditional feature concatenation, the proposed **Gated Multimodal Unit (GMU)** dynamically learns the importance of each modality for every patient.
 
 ---
 
-# 🚀 Highlights
+#  Highlights
 
-- 🧠 Novel multimodal framework for NSCLC recurrence prediction
-- ⚡ Adaptive **Gated Multimodal Unit (GMU)** fusion
-- 💻 Trained entirely on a single **NVIDIA RTX 3050 Laptop GPU (6 GB VRAM)**
-- 🔍 Explainable AI using **Grad-CAM**, **SHAP**, and **GMU gate-weight analysis**
-- 📊 Five-fold stratified cross-validation
-- 🚫 Automatic out-of-distribution image rejection
-- 🌐 Interactive Streamlit dashboard
+-  Novel multimodal framework for NSCLC recurrence prediction
+-  Adaptive **Gated Multimodal Unit (GMU)** fusion
+-  Trained entirely on a single **NVIDIA RTX 3050 Laptop GPU (6 GB VRAM)**
+-  Explainable AI using **Grad-CAM**, **SHAP**, and **GMU gate-weight analysis**
+-  Five-fold stratified cross-validation
+-  Automatic out-of-distribution image rejection
+-  Interactive Streamlit dashboard
 
 ---
 
-# 🎯 Objectives
+#  Objectives
 
 - Predict NSCLC recurrence from a deduplicated TCGA patient cohort.
 - Learn discriminative histopathology image representations using a ResNet-50 encoder.
@@ -48,7 +48,7 @@ to predict NSCLC recurrence using **adaptive multimodal fusion**. Unlike traditi
 
 ---
 
-# 🏗 System Architecture
+#  System Architecture
 
 <p align="center">
   <img src="assets/architecture.png" width="750"/>
@@ -72,7 +72,7 @@ Histopathology Image Patches          Structured Clinical Data
 
 ---
 
-# ⚡ Resource-Efficient Pipeline
+#  Resource-Efficient Pipeline
 
 Rather than performing computationally expensive end-to-end training on gigabyte-scale whole-slide images, this framework adopts an **offline feature extraction strategy**.
 
@@ -82,7 +82,7 @@ The resulting embeddings are stored and reused during multimodal training, allow
 
 ---
 
-# 📂 Dataset
+#  Dataset
 
 ## Clinical Data
 
@@ -132,7 +132,7 @@ Since patient-specific TCGA whole-slide images could not be processed within the
 
 ---
 
-# 🧪 Models Evaluated
+#  Models Evaluated
 
 Three classical machine learning baselines established lower-bound performance before evaluating five deep learning configurations.
 
@@ -155,7 +155,7 @@ The proposed **GMU** achieved the highest ROC-AUC while also producing the lowes
 
 ---
 
-# 📊 GMU Classification Performance
+#  GMU Classification Performance
 
 | Metric | Non-Recurrence | Recurrence | Macro Average |
 |------|------|------|------|
@@ -171,7 +171,7 @@ The use of **Focal Loss** improved sensitivity toward the minority recurrence cl
 
 ---
 
-# 🎛 Calibration & Efficiency
+#  Calibration & Efficiency
 
 | Metric | Value |
 |------|------|
@@ -186,19 +186,19 @@ The use of **Focal Loss** improved sensitivity toward the minority recurrence cl
 
 ---
 
-# 🔍 Explainable AI
+#  Explainable AI
 
 The framework integrates three complementary explainability techniques.
 
-### 🔥 Grad-CAM
+###  Grad-CAM
 
 Highlights image regions responsible for subtype prediction.
 
-### 📈 SHAP
+###  SHAP
 
 Provides both global feature importance and patient-level explanations for clinical variables.
 
-### ⚖ GMU Gate Analysis
+###  GMU Gate Analysis
 
 Quantifies the contribution of image and clinical modalities for each prediction.
 
@@ -214,7 +214,7 @@ Average image contribution:
 
 ---
 
-# 🌐 Streamlit Dashboard
+#  Streamlit Dashboard
 
 The interactive dashboard supports:
 
@@ -227,7 +227,7 @@ The interactive dashboard supports:
 
 ---
 
-# 🛠 Technology Stack
+#  Technology Stack
 
 | Category | Technologies |
 |------------|------------------------------|
@@ -242,7 +242,7 @@ The interactive dashboard supports:
 
 ---
 
-# 📁 Project Structure
+#  Project Structure
 
 ```text
 NSCLC-Prediction/
@@ -263,7 +263,7 @@ NSCLC-Prediction/
 
 ---
 
-# 🚀 Installation
+#  Installation
 
 ```bash
 git clone https://github.com/piyara99/nsclc-multimodal-project.git
@@ -275,7 +275,7 @@ pip install -r requirements.txt
 
 ---
 
-# ▶️ Run
+#  Run
 
 ```bash
 streamlit run app.py
@@ -283,7 +283,7 @@ streamlit run app.py
 
 ---
 
-# 📚 Research
+#  Research
 
 This repository contains the implementation accompanying my **BSc (Hons) Software Engineering Final Year Research Project** completed at **NSBM Green University** in affiliation with the **University of Plymouth (UK)**.
 
@@ -295,7 +295,7 @@ The research investigates resource-efficient multimodal deep learning for predic
 
 ---
 
-# 🔮 Future Work
+#  Future Work
 
 - Patient-specific TCGA whole-slide image integration
 - Vision Transformers
@@ -307,7 +307,7 @@ The research investigates resource-efficient multimodal deep learning for predic
 
 ---
 
-# 👩‍💻 Author
+#  Author
 
 **Piyara Morawakaarachchi**
 
@@ -328,7 +328,7 @@ Final-Year Software Engineering Undergraduate
 
 ---
 
-# 🙏 Acknowledgements
+#  Acknowledgements
 
 - The Cancer Genome Atlas (TCGA)
 - LC25000 Histopathology Dataset
@@ -340,4 +340,4 @@ Final-Year Software Engineering Undergraduate
 
 ---
 
-⭐ **If you found this project interesting, consider giving the repository a star!**
+ **If you found this project interesting, consider giving the repository a star!**
